@@ -4,17 +4,17 @@ from django.views.decorators.csrf import csrf_exempt
 from . import db
 
 
-def get_question(request) -> json:
+def get_question(request) -> HttpResponse:
 	if request.method == 'GET':
 		return HttpResponse(db.get_question(), content_type='application/json')
 
 
-def get_history(request) -> json:
+def get_history(request) -> HttpResponse:
 	if request.method == 'GET':
 		return HttpResponse(db.get_history(), content_type='application/json')
 
 
-def get_user(request) -> json:
+def get_user(request) -> HttpResponse:
 	if request.method == 'GET':
 		return HttpResponse(db.get_user(), content_type='application/json')
 
@@ -37,7 +37,7 @@ def add_user(request) -> None:
 		db.add_user(json.dumps(request.body))
 
 
-def search_history(request) -> json:
+def search_history(request) -> HttpResponse:
 	if request.method == 'GET':
 		history_json = db.search_history(request.GET.get('search', default=None))
 		return HttpResponse(history_json, content_type='application/json')
