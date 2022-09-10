@@ -1,98 +1,97 @@
 import json
+import sqlite3
+
+conn = sqlite3.connect('../proj1.db')
+cursor = conn.cursor()
 
 
 def get_question() -> json:
-	return json.dumps([
-		{
-			"A": "西昌卫星发射中心",
-			"B": "酒泉卫星发射中心",
-			"C": "太原卫星发射中心",
-			"D": "海南文昌航天发射场",
-			"answer": "B",
-			"provider": "原始题库",
-			"question": "我国载人飞船的发射场为______。\nA.西昌卫星发射中心\nB.酒泉卫星发射中心\nC.太原卫星发射中心\nD.海南文昌航天发射场",
-			"question_id": 1,
-			"select_question": "我国载人飞船的发射场为______。",
-			"type": "客观题"
-		},
-		{
-			"A": "11",
-			"B": "15",
-			"C": "16",
-			"D": "18",
-			"answer": "C",
-			"provider": "原始题库",
-			"question": "国际空间站是人类历史上最庞大的航天工程，共有______个国家参与研制。\nA.11\nB.15\nC.16\nD.18",
-			"question_id": 2,
-			"select_question": "国际空间站是人类历史上最庞大的航天工程，共有______个国家参与研制。",
-			"type": "客观题"
-		}
-	])
+    def tuple2dict(x):
+        return {
+            "A": x[0],
+            "B": x[1],
+            "C": x[2],
+            "D": x[3],
+            "answer": x[4],
+            "provider": x[5],
+            "question": x[6],
+            "question_id": x[7],
+            "select_question": x[8],
+            "type": x[9]
+        }
+
+    sql = """select 
+                A, B,C, D, answer, provider, question, question_id, select_question, type
+            from 
+                question_bank"""
+    cursor.execute(sql)
+    total = cursor.fetchall()
+    result = map(tuple2dict, total)
+    return json.dumps(list(result))
 
 
 def get_history() -> json:
-	return json.dumps([
-		{
-			"answer": "",
-			"history_type": "搜索题目",
-			"practice_time": 0,
-			"question_id": 98,
-			"score": -1.0,
-			"table_id": 1
-		},
-		{
-			"answer": "B",
-			"history_type": "小练习",
-			"practice_time": 1,
-			"question_id": 1022,
-			"score": 10.0,
-			"table_id": 2
-		},
-		{
-			"answer": "B",
-			"history_type": "小练习",
-			"practice_time": 1,
-			"question_id": 213,
-			"score": 0.0,
-			"table_id": 3
-		}
-	])
+    def tuple2dict(x):
+        return {
+            "answer": x[0],
+            "history_type": x[1],
+            "practice_time": x[2],
+            "question_id": x[3],
+            "score": x[4],
+            "table_id": x[5]
+        }
+
+    sql = """select 
+                answer, history_type, practice_time, question_id, score, table_id
+            from 
+                history_bank"""
+    cursor.execute(sql)
+    total = cursor.fetchall()
+    result = map(tuple2dict, total)
+    return json.dumps(list(result))
 
 
 def get_user() -> json:
-	return json.dumps([
-		{
-			"highest_score": 0,
-			"name": "hys",
-			"password": "123456"
-		}
-	])
+    def tuple2dict(x):
+        return {
+            "highest_score": x[0],
+            "name": x[1],
+            "password": x[2]
+        }
 
+    sql = """select 
+                answer, history_type, practice_time, question_id, score, table_id
+            from 
+                history_bank"""
+    cursor.execute(sql)
+    total = cursor.fetchall()
+    result = map(tuple2dict, total)
+    return json.dumps(list(result))
 
 def delete_history(question_id: int) -> None:
-	pass
+    pass
 
 
 def add_question(question: json) -> None:
-	pass
+    pass
 
 
 def add_user(user: json) -> None:
-	pass
+    pass
 
 
 def search_history(key_words: str) -> json:
-	return json.dumps([
-		{
-			"answer": "",
-			"history_type": "搜索题目",
-			"practice_time": 0,
-			"question_id": 98,
-			"score": -1.0,
-			"table_id": 1
-		},
-	])
+    return json.dumps([
+        {
+            "answer": "",
+            "history_type": "搜索题目",
+            "practice_time": 0,
+            "question_id": 98,
+            "score": -1.0,
+            "table_id": 1
+        },
+    ])
 
 
 def change_answer(question_id: int, answer: []) -> None:
-	pass
+    pass
