@@ -1,11 +1,10 @@
 import json
 import sqlite3
 
-conn = sqlite3.connect('../proj1.db')
-cursor = conn.cursor()
-
 
 def get_question() -> json:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
     def tuple2dict(x):
         return {
             "A": x[0],
@@ -31,6 +30,8 @@ def get_question() -> json:
 
 
 def get_history() -> json:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
     def tuple2dict(x):
         return {
             "answer": x[0],
@@ -52,6 +53,9 @@ def get_history() -> json:
 
 
 def get_user() -> json:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
+    
     def tuple2dict(x):
         return {
             "highest_score": x[0],
@@ -70,6 +74,9 @@ def get_user() -> json:
 
 
 def delete_history(table_id: int) -> None:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
+    
     sql = f"""delete from
                 history_bank
             where
@@ -93,6 +100,8 @@ def delete_history(table_id: int) -> None:
 
 
 def add_question(question: json) -> None:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
     sql = f"""insert into
                     question_bank
                 values
@@ -110,6 +119,8 @@ def add_question(question: json) -> None:
 
 
 def add_user(user: json) -> None:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
     sql = f"""insert or replace into
                     user_bank
                 values
@@ -119,6 +130,8 @@ def add_user(user: json) -> None:
 
 
 def search_history(key_words: str) -> json:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
     sql = f"""select
                     h.answer answer, h.history_type history_type, h.practice_time practice_time,
                     h.question_id question_id, h.score score, h.table_id table_id
@@ -157,6 +170,8 @@ def search_history(key_words: str) -> json:
 
 
 def change_answer(question_id: int, answer: []) -> None:
+    conn = sqlite3.connect('./proj1.db')
+    cursor = conn.cursor()
     answer.sort()
     sql = f"""update
                     user_bank
