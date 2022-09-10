@@ -17,12 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
     path('getquestion/', views.get_question),
     path('gethistory/', views.get_history),
     path('getuser/', views.get_user),
-    path('deletehis/<int:question_id>', views.delete_history),
+    path('deletehis/<int:table_id>', views.delete_history),
     path('addquestion/', views.add_question),
     path('adduser/', views.add_user),
     path('searchhis/', views.search_history),
