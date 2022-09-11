@@ -5,6 +5,7 @@ import sqlite3
 def get_question() -> json:
     conn = sqlite3.connect('./proj1.db')
     cursor = conn.cursor()
+    
     def tuple2dict(x):
         return {
             "A": x[0],
@@ -32,6 +33,7 @@ def get_question() -> json:
 def get_history() -> json:
     conn = sqlite3.connect('./proj1.db')
     cursor = conn.cursor()
+    
     def tuple2dict(x):
         return {
             "answer": x[0],
@@ -100,13 +102,15 @@ def delete_history(table_id: int) -> None:
 
 
 def add_question(question: json) -> None:
+    question = json.loads(json.loads(question))
     conn = sqlite3.connect('./proj1.db')
     cursor = conn.cursor()
     sql = f"""insert into
                     question_bank
                 values
-                    ('{question[6]}', '{question[4]}', {question[9]}, {question[8]}, {question[0]},
-                    {question[1]}, {question[2]}, {question[3]}, {question[5]}, {question[7]})"""
+                    ('{question["question"]}', '{question["answer"]}', '{question["type"]}',
+                    '{question["select_question"]}', '{question["A"]}', '{question["B"]}', '{question["C"]}',
+                    '{question["D"]}', '{question["provider"]}', {question["question_id"]})"""
     cursor.execute(sql)
     conn.commit()
     """
@@ -119,14 +123,17 @@ def add_question(question: json) -> None:
 
 
 def add_user(user: json) -> None:
+    user = json.loads(json.loads(user))
+    # print(user)
     conn = sqlite3.connect('./proj1.db')
     cursor = conn.cursor()
     sql = f"""insert or replace into
                     user_bank
                 values
-                    ({user[0]}, '{user[1]}', '{user[2]}')"""
+                    ({user["highest_score"]}, '{user["name"]}', '{user["password"]}')"""
     cursor.execute(sql)
     conn.commit()
+    return
 
 
 def search_history(key_words: str) -> json:
@@ -148,6 +155,7 @@ def search_history(key_words: str) -> json:
                 """
     cursor.execute(sql)
     x = cursor.fetchone()
+    # print(sql)
     if x is not None:
         result = {
             "answer": x[0],
@@ -173,8 +181,9 @@ def change_answer(question_id: int, answer: []) -> None:
     conn = sqlite3.connect('./proj1.db')
     cursor = conn.cursor()
     answer.sort()
+    # print(answer)
     sql = f"""update
-                    user_bank
+                    question_bank
                 set 
                     answer = '{"-".join(answer)}'
                 where

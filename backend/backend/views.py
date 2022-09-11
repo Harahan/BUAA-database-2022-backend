@@ -4,6 +4,13 @@ from django.views.decorators.csrf import csrf_exempt
 from . import db
 
 
+class BytesEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return str(obj, encoding='utf-8')
+        return json.JSONEncoder.default(self, obj)
+
+
 def get_question(request) -> HttpResponse:
     if request.method == 'GET':
         return HttpResponse(db.get_question(), content_type='application/json')
@@ -28,13 +35,13 @@ def delete_history(request, table_id: int) -> None:
 @csrf_exempt
 def add_question(request) -> None:
     if request.method == 'PUT':
-        db.add_question(json.dumps(request.body))
+        db.add_question(json.dumps(request.body, ensure_ascii=False, cls=BytesEncoder))
 
 
 @csrf_exempt
 def add_user(request) -> None:
     if request.method == 'PUT':
-        db.add_user(json.dumps(request.body))
+        db.add_user(json.dumps(request.body, ensure_ascii=False, cls=BytesEncoder))
 
 
 def search_history(request) -> HttpResponse:
@@ -46,4 +53,4 @@ def search_history(request) -> HttpResponse:
 @csrf_exempt
 def change_answer(request, question_id: int) -> None:
     if request.method == 'POST':
-        db.change_answer(question_id, [x for x in request.POST.get('ans', default='')])
+        db.change_answer(question_id, [x for x in request.POST.get('answer', default='')])
