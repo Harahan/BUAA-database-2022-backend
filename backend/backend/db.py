@@ -110,7 +110,7 @@ def add_question(question: json) -> None:
                 values
                     ('{question["question"]}', '{question["answer"]}', '{question["type"]}',
                     '{question["select_question"]}', '{question["A"]}', '{question["B"]}', '{question["C"]}',
-                    '{question["D"]}', '{question["provider"]}', {question["question_id"]})"""
+                    '{question["D"]}', '{question["provider"]}')"""
     cursor.execute(sql)
     conn.commit()
     """
