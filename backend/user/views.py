@@ -22,10 +22,8 @@ def signup(request):
 	if request.method == 'POST':
 		if request.user.is_authenticated:
 			return JsonResponse({'code': 3}, status=status.HTTP_200_OK)
-		
 		username = request.POST.get('username')
 		password = request.POST.get('password')
-		# print(username, password)
 		if User.objects.filter(username=username).exists():
 			return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
 		else:
