@@ -68,6 +68,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # ------ for file -----------
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -136,3 +138,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # -------------- user --------------
 AUTH_USER_MODEL = 'user.User'
+
+# -------------- file path --------------
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
+# print(MEDIA_ROOT)

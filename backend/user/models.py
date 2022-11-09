@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-	pass
+	avatar = models.ImageField(upload_to='avatar', default='avatar/default.jpg')
 
 	def __str__(self):
 		return self.username

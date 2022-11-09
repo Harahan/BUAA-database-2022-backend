@@ -14,7 +14,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 		# change the format of releaseTime
 		if timezone.timedelta(hours=1) <= releaseTime - timezone.now() < timezone.timedelta(days=1):
 			data['releaseTime'] = (releaseTime - timezone.now()).hours + "小时前"
-		elif releaseTime - timezone.now() < timezone.timedelta(hours=1):
+		elif timezone.timedelta(minutes=1) < releaseTime - timezone.now() < timezone.timedelta(hours=1):
 			data['releaseTime'] = (releaseTime - timezone.now()).minutes + "分钟前"
 		else:
 			data['releaseTime'] = releaseTime.strftime('%Y-%m-%d')
