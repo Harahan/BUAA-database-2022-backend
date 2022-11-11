@@ -56,11 +56,6 @@ def login(request):
 
 
 # logout
-# return {'code': number}
-# number:
-# 0 --> success
-# 1 --> user who has not logged in cannot log out
-# GET method
 def logout(request):
 	if request.user.is_authenticated:
 		auth.logout(request)

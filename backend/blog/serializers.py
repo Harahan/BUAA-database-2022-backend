@@ -17,8 +17,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 			data['releaseTime'] = str(t.seconds // 3600) + "小时前"
 		elif timezone.timedelta(minutes=1) < t < timezone.timedelta(hours=1):
 			data['releaseTime'] = str(t.seconds // 60) + "分钟前"
+		elif timezone.timedelta(minutes=1) >= t:
+			data['releaseTime'] = "刚刚"
 		else:
 			data['releaseTime'] = releaseTime.strftime('%Y-%m-%d')
 		data['authorName'] = instance.authorName.username
+		
 		return data
 		
