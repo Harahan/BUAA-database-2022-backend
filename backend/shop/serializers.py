@@ -3,7 +3,7 @@ import os
 
 from rest_framework import serializers
 from .models import Merchandise
-from settings import WEB_HOST_MEDIA_URL
+# from settings import WEB_HOST_MEDIA_URL
 
 
 class MerchandiseSerializer(serializers.ModelSerializer):
