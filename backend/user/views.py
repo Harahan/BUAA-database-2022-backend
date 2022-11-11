@@ -1,22 +1,21 @@
+import base64
+import os
+
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 
 # Create your views here.
 
-
+from backend.settings import MEDIA_ROOT
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from .models import User, Follow
+# import settings
+from .serializers import UserSerializer
 
 
-# sign up
-# return {'code': number}
-# number:
-# 0 --> success
-# 1 --> username has already existed
-# 2 --> request method is not POST
-# 3 --> user who has logged in cannot sign up
+# signup
 @csrf_exempt
 def signup(request):
 	if request.method == 'POST':
@@ -35,12 +34,6 @@ def signup(request):
 
 
 # login
-# return {'code': number}
-# number:
-# 0 --> success
-# 1 --> username or password is wrong
-# 2 --> request method is not POST
-# 3 --> user who has entered can't log in again
 @csrf_exempt
 def login(request):
 	if request.method == 'POST':
@@ -49,10 +42,14 @@ def login(request):
 		
 		username = request.POST.get('username')
 		password = request.POST.get('password')
+		# print(username, password)
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			auth.login(request, user)
-			return JsonResponse({'code': 0}, status=status.HTTP_200_OK)
+			user = User.objects.get(username=username)
+			serializer = UserSerializer(user)
+			serializer.data['code'] = 0
+			return JsonResponse(serializer.data, status=status.HTTP_200_OK)
 		else:
 			return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
 	return JsonResponse({'code': 2}, status=status.HTTP_400_BAD_REQUEST)
@@ -72,13 +69,6 @@ def logout(request):
 
 
 # follow
-# return {'code': number}
-# number:
-# 0 --> success follow
-# 1 --> cancel follow
-# 2 --> request method is not POST
-# 3 --> visitor needs to log in
-# 4 --> user cannot follow himself
 @csrf_exempt
 def follow(request):
 	if request.method == 'POST':
@@ -94,4 +84,38 @@ def follow(request):
 		else:
 			Follow.objects.create(followee=followee, follower=follower)
 			return JsonResponse({'code': 0}, status=status.HTTP_200_OK)
+	return JsonResponse({'code': 2}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# fix profile
+@csrf_exempt
+def fix_profile(request):
+	if request.method == 'POST':
+		if not request.user.is_authenticated:
+			return JsonResponse({'code': 3}, status=status.HTTP_200_OK)
+		user = request.user
+		if request.POST.get('question') and request.POST.get('answer'):
+			user.question = request.POST.get('question')
+			user.answer = request.POST.get('answer')
+		if request.POST.get('email'):
+			user.email = request.POST.get('email')
+		if request.POST.get('username'):
+			if User.objects.filter(username=request.POST.get('username')).exists():
+				return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
+			user.username = request.POST.get('username')
+		if request.POST.get('password'):
+			user.set_password(request.POST.get('password'))
+		if request.FILES.get('avatar'):
+			try:
+				avatar = request.FILES.get('avatar')
+				filepath = MEDIA_ROOT / "avatar" / (str(user.id) + ".jpg")
+				with open(filepath, 'wb') as f:
+					for info in avatar.chunks():
+						f.write(info)
+				user.avatar = "avatar/" + str(user.id) + ".jpg"
+			except Exception:
+				return JsonResponse({'code': 4}, status=status.HTTP_200_OK)
+		user.save()
+		auth.login(request, user)
+		return JsonResponse({'code': 0}, status=status.HTTP_200_OK)
 	return JsonResponse({'code': 2}, status=status.HTTP_400_BAD_REQUEST)

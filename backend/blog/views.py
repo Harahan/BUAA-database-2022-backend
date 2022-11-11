@@ -51,10 +51,13 @@ def delete(request):
 # the domains of image and userPhoto are not exist
 def fetchOne(request):
 	if request.method == 'GET':
-		article = Article.objects.filter(authorName=User.objects.get(username=request.GET.get('author_Name')),
-										 title=request.GET.get('tit'))
-		serializer = ArticleSerializer(article, many=True)  # may be not only one article
-		return JsonResponse(serializer.data, safe=False)
+		if User.objects.filter(username=request.GET['author_Name']).exists():
+			article = Article.objects.filter(authorName=User.objects.get(username=request.GET.get('author_Name')),
+											 title=request.GET.get('tit'))
+			# print("ddd")
+			if article:
+				serializer = ArticleSerializer(article, many=True)  # may be not only one article
+				return JsonResponse(serializer.data, safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 	
 	

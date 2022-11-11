@@ -13,6 +13,7 @@ from .serializers import MerchandiseSerializer
 def fetchAll(request):
 	if request.method == 'GET':
 		merchandises = Merchandise.objects.all()
-		serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
-		return JsonResponse(serializer.data, safe=False)
+		if merchandises:
+			serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
+			return JsonResponse(serializer.data, safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)

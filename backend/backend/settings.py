@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -140,6 +140,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 AUTH_USER_MODEL = 'user.User'
 
 # -------------- file path --------------
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
+WEB_HOST_MEDIA_URL = 'http://127.0.0.1:8000' + MEDIA_URL
+# print(WEB_HOST_MEDIA_URL)
 # print(MEDIA_ROOT)
