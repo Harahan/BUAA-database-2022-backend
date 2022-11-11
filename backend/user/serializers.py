@@ -23,6 +23,8 @@ class UserSerializer(serializers.ModelSerializer):
 			data['date_joined'] = str(t.seconds // 3600) + "小时前"
 		elif timezone.timedelta(minutes=1) < t < timezone.timedelta(hours=1):
 			data['date_joined'] = str(t.seconds // 60) + "分钟前"
+		elif timezone.timedelta(minutes=1) >= t:
+			data['date_joined'] = "刚刚"
 		else:
 			data['date_joined'] = date_joined.strftime('%Y-%m-%d')
 		data['code'] = 0
