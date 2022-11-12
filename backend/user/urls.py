@@ -9,4 +9,5 @@ urlpatterns = [
 	path('logout/', views.logout),
 	path('follow/', views.follow),
 	path('fixProfile/', views.fix_profile),
+	path('getProfile/', views.get_profile),
 ]
