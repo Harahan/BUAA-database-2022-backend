@@ -98,7 +98,7 @@ def delete(request):
 # the domains of image and userPhoto are not exist
 def fetch_one(request):
 	if request.method == 'GET':
-		if User.objects.filter(username=request.GET['author_Name']).exists():
+		if User.objects.filter(username=request.GET.get('author_Name')).exists():
 			article = Article.objects.filter(authorName=User.objects.get(username=request.GET.get('author_Name')),
 											 title=request.GET.get('tit'))
 			# print("ddd")
