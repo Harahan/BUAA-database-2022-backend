@@ -333,9 +333,16 @@
 
 * ``moment/sendMoment``
 
-  ``GET``
+  ``POST``
 
+  如果``content``为空返回所有，否则只返回当前更新的
+  
   ```python
+  I:
+      {
+          "content": xxx
+      }
+  
   O:
       # sucess
       {
@@ -368,5 +375,5 @@
 ## log:
 
 * 2022/11/12/23:30: 添加完成``postArticle``、``uploadPicture``、``getProfile``、修改``fetchAll``、对于所有``fetch*``当为空时改为返回会``{}``或者``[]``，并完成简单测试
-
 * 2022/11/13/17:00：对于``blog``而言调整``fetchOne``格式与``fetchAll``格式一致，完成``sendMoment``，大改完成``fetchAll``（``blog``）
+* 2022/11/13/23:00：调整``sendMoment``
