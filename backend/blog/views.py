@@ -6,26 +6,65 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from selectolax.parser import HTMLParser
-from user.models import User
+from user.models import User, Follow
 from .models import Article, Area, AreaWithArticle
 from .serializers import ArticleSerializer
 from backend.settings import WEB_HOST_MEDIA_URL, MEDIA_ROOT
+from fuzzywuzzy import fuzz
 # Create your views here.
-
-
-# fetch all articles
-# 404 if request method is not GET
-# the domains of image and userPhoto are not exist
 
 
 def fetch_all(request):
 	if request.method == 'GET':
 		articles = Article.objects.all()
-		if articles:
-			serializer = ArticleSerializer(articles, many=True, allow_null=True)
-			return JsonResponse(serializer.data, safe=False)
-		else:
-			return JsonResponse({}, safe=False)
+		if not articles:
+			return JsonResponse([], safe=False)
+		if request.GET['follow'] == 'true':
+			if not request.user.is_authenticated:
+				return JsonResponse([], status=status.HTTP_200_OK)
+			if Follow.objects.filter(follower=request.user).exists():
+				articles1 = articles.filter(authorName_id__in=
+										   Follow.objects.filter(follower=request.user).values_list('followee', flat=True))
+				articles = articles.filter(authorName=request.user) | articles1
+				if not articles:
+					return JsonResponse([], safe=False)
+			else:
+				articles = articles.filter(authorName=request.user)
+				if not articles:
+					return JsonResponse([], safe=False)
+		if request.GET['tag']:
+			tag_list = request.GET['tag'].split(',')
+			if Area.objects.filter(areaName__in=tag_list).exists():
+				# 作为外码存的是id
+				articles2 = None
+				for tag in tag_list:
+					tmp_articles = AreaWithArticle.objects.filter(area__areaName=tag).values_list('article', flat=True)
+					if articles2:
+						articles2 = articles2.intersection(tmp_articles)
+					elif tmp_articles:
+						articles2 = tmp_articles
+				if articles2 is not None:
+					articles = articles.filter(id__in=articles2)
+					if not articles:
+						return JsonResponse([], safe=False)
+				else:
+					return JsonResponse([], safe=False)
+			else:
+				return JsonResponse([], safe=False)
+		if request.GET['search']:
+			title = request.GET['search']
+			articles3 = []
+			for article in articles:
+				if fuzz.ratio(article.title, title) > 30:
+					articles3.append(article)
+			if articles3:
+				articles = articles3
+			else:
+				return JsonResponse([], safe=False)
+		serializer = ArticleSerializer(articles, many=True)
+		# serializer.data.sort(key=lambda x: x['releaseTime'], reverse=True)
+		serializer_data = sorted(serializer.data, key=lambda x: x['releaseTime'], reverse=True)
+		return JsonResponse(serializer_data, safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 	
 

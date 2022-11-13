@@ -171,7 +171,7 @@
 
   ```python
   O:  
-      {
+      [
           {
               "name": xx,
               "image": xx,
@@ -181,10 +181,10 @@
               ...
           }
           ...
-      }
+       ]
   ```
 
-  如果为空或者不是``GET``，返回``404``
+  找不到全为空
 
 ## BLOG
 
@@ -192,9 +192,27 @@
 
   ``GET``
 
+  * ``tag``用逗号分隔
+  * ``follow``字符串，``true``或``""``
+
+  逻辑：
+
+  * ``follow``：为``true``，如果用户未登陆返回空，否则搜索用户以及与他关联的用户文章
+  * ``tag``：需要全满足才返回
+  * ``search``：编辑距离匹配``title``，``ratio``达到$30\%$即可
+
+  以上过程可以叠加，如果有字段为空表示不需要按照该字段筛选，同时如果某字段的筛选为空会直接返回空
+
   ```python
-  O: 
+  I:
       {
+          "follow": xx,
+          "tag": xx,
+          "search": xx
+      }
+  
+  O: 
+      [
           {
               "authorName": xx,
               "releaseTime": xx,
@@ -209,8 +227,10 @@
               ...
           }
           ...
-      }
+      ]
   ```
+
+  找不到全为空
 
 * ``blog/fetchOne/``
 
@@ -225,11 +245,14 @@
       
   O:
   	{
-          "authorName": xx,
+         "authorName": xx,
           "releaseTime": xx,
-          "categories": xx,
+          "categories": [xx, yy ...], # maybe is an empty list
           "title": xx,
-          "digest": xx
+          "digest": xx,
+          "userPhoto": xx,
+          "cover": xx,
+          "html": xx
       }
   ```
 
@@ -306,9 +329,44 @@
 
   ``tags``：xxx,xxx,xxx,xxx
 
+## MOMENT
+
+* ``moment/sendMoment``
+
+  ``GET``
+
+  ```python
+  O:
+      # sucess
+      {
+          "code": xx
+          "data": [
+              {
+                  "username": xxx,
+                  "avatar": xxx,
+                  "content": xxx,
+                  "time": xxx
+              }
+              {
+                  ....
+              }
+              ...
+          ]  
+      }
+      
+      # fail
+      {
+          "code": xx
+      }
+      
+  # code:
+  # 0 --> success
+  # 1 --> please sign in before
+
 ------
 
 ## log:
 
-* 2022/11/12/23:30: 添加完成``postArticle``、``uploadPicture``、``getProfile``、修改``fetchAll``、对于所有``fetch*``当为空时改为返回会``{}``，并完成简单测试
+* 2022/11/12/23:30: 添加完成``postArticle``、``uploadPicture``、``getProfile``、修改``fetchAll``、对于所有``fetch*``当为空时改为返回会``{}``或者``[]``，并完成简单测试
 
+* 2022/11/13/17:00：对于``blog``而言调整``fetchOne``格式与``fetchAll``格式一致，完成``sendMoment``，大改完成``fetchAll``（``blog``）

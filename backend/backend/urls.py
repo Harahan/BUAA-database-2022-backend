@@ -23,6 +23,7 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('blog/', include('blog.urls')),
     path('shop/', include('shop.urls')),
+    path('moment/', include('moment.urls')),
 ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

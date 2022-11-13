@@ -17,5 +17,5 @@ def fetchAll(request):
 			serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
 			return JsonResponse(serializer.data, safe=False)
 		else:
-			JsonResponse({}, safe=False)
+			JsonResponse([], safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)

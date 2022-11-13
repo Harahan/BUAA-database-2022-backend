@@ -38,6 +38,7 @@ def signup(request):
 def login(request):
 	if request.method == 'POST':
 		if request.user.is_authenticated:
+			# print(request.user)
 			return JsonResponse({'code': 3}, status=status.HTTP_200_OK)
 		
 		username = request.POST.get('username')
