@@ -38,6 +38,7 @@ def signup(request):
 def login(request):
 	if request.method == 'POST':
 		if request.user.is_authenticated:
+			# print(request.user)
 			return JsonResponse({'code': 3}, status=status.HTTP_200_OK)
 		
 		username = request.POST.get('username')
@@ -102,15 +103,20 @@ def fix_profile(request):
 			user.set_password(request.POST.get('password'))
 		if request.FILES.get('avatar'):
 			try:
-				avatar = request.FILES.get('avatar')
-				filepath = MEDIA_ROOT / "avatar" / (str(user.id) + ".jpg")
-				with open(filepath, 'wb') as f:
-					for info in avatar.chunks():
-						f.write(info)
-				user.avatar = "avatar/" + str(user.id) + ".jpg"
+				user.avatar = request.FILES.get('avatar')
 			except Exception:
 				return JsonResponse({'code': 4}, status=status.HTTP_200_OK)
 		user.save()
 		auth.login(request, user)
 		return JsonResponse({'code': 0}, status=status.HTTP_200_OK)
 	return JsonResponse({'code': 2}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_profile(request):
+	if request.method == 'GET':
+		if not request.user.is_authenticated:
+			return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
+		user = request.user
+		serializer = UserSerializer(user)
+		serializer.data['code'] = 0
+		return JsonResponse(serializer.data, status=status.HTTP_200_OK)

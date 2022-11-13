@@ -1,6 +1,9 @@
+import os.path
+
 from django.db import models
 from django.utils import timezone
-
+from backend.settings import MEDIA_ROOT, WEB_HOST_MEDIA_URL
+from selectolax.parser import HTMLParser
 
 # Create your models here.
 
@@ -10,9 +13,10 @@ class Article(models.Model):
 	releaseTime = models.DateTimeField(auto_now=True)
 	# categories = models.CharField(max_length=1024)
 	title = models.CharField(max_length=120)
-	digest = models.TextField()  # actually this is the article's content
-	
-	# ------------- image, userPhoto -------------
+	# digest = models.TextField()  # actually this is the article's content
+	html = models.FileField(upload_to='article/html', default='article/html/default.html')
+	cover = models.TextField(default=os.path.join(WEB_HOST_MEDIA_URL, 'article/picture/default.jpg'))
+
 	def __str__(self):
 		return self.title
 	

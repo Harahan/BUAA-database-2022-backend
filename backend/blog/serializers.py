@@ -1,6 +1,12 @@
+import os
+
 from django.utils import timezone
 from rest_framework import serializers
+from selectolax.parser import HTMLParser
+
 from . import models
+from .models import AreaWithArticle
+from backend.settings import WEB_HOST_MEDIA_URL
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -22,6 +28,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 		else:
 			data['releaseTime'] = releaseTime.strftime('%Y-%m-%d')
 		data['authorName'] = instance.authorName.username
-		
+		if AreaWithArticle.objects.filter(article=instance).exists():
+			data['categories'] = [a.area.areaName for a in AreaWithArticle.objects.filter(article=instance)]
+		data['userPhoto'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.authorName.avatar))
+		file = open(instance.html.path, 'r', encoding='utf-8').read()
+		data['digest'] = HTMLParser(file).text().replace('\n', '').replace('\t', '').replace('\r', '').replace(' ', '')
+		data['html'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.html))
 		return data
 		
