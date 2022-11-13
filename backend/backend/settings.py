@@ -31,6 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # -------- beautify admin --------
+    'simpleui',
+    # ------- my app ----------
+    'user',
+    'blog',
+    'shop',
+    'moment',
+    'group',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,11 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # -------- package ----------
     'rest_framework',
-    # ------- my app ----------
-    'user',
-    'blog',
-    'shop',
-    'moment',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +153,13 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 WEB_HOST_MEDIA_URL = 'http://127.0.0.1:8000' + MEDIA_URL
 # print(WEB_HOST_MEDIA_URL)
 # print(MEDIA_ROOT)
+
+# -------------- simpleui --------------
+SIMPLEUI_LOGO = WEB_HOST_MEDIA_URL + 'avatar/default.jpg'
+# 隐藏右侧SimpleUI广告链接和使用分析
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_ANALYSIS = False
+
+
+DATETIME_FORMAT = 'Y-m-d H:i:s'
+DATE_FORMAT = 'Y-m-d'
