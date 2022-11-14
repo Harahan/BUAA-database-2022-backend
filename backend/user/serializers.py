@@ -20,11 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
 		# print(date_joined - timezone.now())
 		t = timezone.now() - date_joined
 		if timezone.timedelta(hours=1) <= t < timezone.timedelta(days=1):
-			data['date_joined'] = str(t.seconds // 3600) + "小时前"
+			data['date_joined'] = str(t.seconds // 3600) + " hours ago"
 		elif timezone.timedelta(minutes=1) < t < timezone.timedelta(hours=1):
-			data['date_joined'] = str(t.seconds // 60) + "分钟前"
+			data['date_joined'] = str(t.seconds // 60) + " minutes ago"
 		elif timezone.timedelta(minutes=1) >= t:
-			data['date_joined'] = "刚刚"
+			data['date_joined'] = "just now"
 		else:
 			data['date_joined'] = date_joined.strftime('%Y-%m-%d')
 		data['code'] = 0

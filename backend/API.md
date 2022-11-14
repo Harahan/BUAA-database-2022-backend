@@ -369,6 +369,116 @@
   # code:
   # 0 --> success
   # 1 --> please sign in before
+  ```
+
+## CHAT
+
+**注意避免游客访问，后端就不检查了**
+
+* ``chat/getChats/``
+
+  ``GET``
+
+  **注意存``id``！！！！**
+
+  ```python
+  O:
+      [
+          {
+              "id": xxx, # private chat(group chat) id
+              "type": xxx, # private chat(group chat)
+              "name": xxx, # "" if the chat is a private chat 
+              "time": xxx, # creating time
+              "owner": xxx, # sponsor
+              "avatar": xxx,
+              "latest": { # maybe is {}
+                  "username": xxx,
+                  "content": xxx,
+                  "avatar": xxx,
+                  "time": xxx
+              }
+          }
+          {
+              ...
+          }
+          ...
+      ]
+  ```
+
+* ``chat/findUser/``
+
+  ``GET``
+
+  ```python
+  I:
+      {
+          "id": xx, # group(private or group) id
+          "username": xxx
+      }
+  
+  O:	
+      {
+          "username": xx,
+          "avatar": xx,
+          "content": xxx, # latest 
+          "time": xxx
+      }
+  ```
+
+* ``group/getRecords/``
+
+  ``GET``
+
+  ```python
+  I:
+      {
+          "id": xxx # group(private or group) id
+      }
+      
+  O:
+      [
+          {
+              "sender": xxx, # the user loging in now
+              "username": xxx,
+              "avatar": xxx,
+              "content": xxx,
+              "time": xxx
+          }
+          {
+              ...
+          }
+          ...
+      ]
+  ```
+
+* ``chat/sendRecord/``
+
+  ``POST``
+
+  ```python
+  I:
+      {
+          "id": xxx, # group(private or group) id
+          "content": xxx,
+      }
+      
+  O:
+      [
+          {
+              "sender": xxx, # the user loging in now: 0, other: 1
+              "username": xxx,
+              "avatar": xxx,
+              "content": xxx,
+              "time": xxx
+          }
+          {
+              ...
+          }
+          ...
+      ]
+  ```
+  
+
 
 ------
 
@@ -377,3 +487,4 @@
 * 2022/11/12/23:30: 添加完成``postArticle``、``uploadPicture``、``getProfile``、修改``fetchAll``、对于所有``fetch*``当为空时改为返回会``{}``或者``[]``，并完成简单测试
 * 2022/11/13/17:00：对于``blog``而言调整``fetchOne``格式与``fetchAll``格式一致，完成``sendMoment``，大改完成``fetchAll``（``blog``）
 * 2022/11/13/23:00：调整``sendMoment``
+* 2022/11/14/21:00:	完成``getChats``、``findUser``、``getRecords``、``sendRecord``

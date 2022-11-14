@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'blog',
     'shop',
     'moment',
-    'group',
+    'chat',
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -143,6 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_AGE = 5 * 60 * 60   # 5 hours
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_SECURE = True
 
 # -------------- user --------------
 AUTH_USER_MODEL = 'user.User'
