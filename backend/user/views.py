@@ -120,13 +120,16 @@ def fix_profile(request):
 	return JsonResponse({'code': 2}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@csrf_exempt
 def get_profile(request):
-	if request.method == 'GET':
-		if not request.GET.get('username'):
+	if request.method == 'POST':
+		if not request.POST.get('username'):
 			if request.user.is_authenticated:
 				return JsonResponse(UserSerializer(request.user).data, status=status.HTTP_200_OK);
 			return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
-		user = User.objects.get(username=request.GET.get('username'))
+		user = User.objects.get(username=request.POST.get('username'))
 		serializer = UserSerializer(user)
-		serializer.data['code'] = 0 if request.user.username == request.GET.get('username') else 1
+		serializer.data['code'] = 0 if request.user.is_authenticated and \
+									   request.user.username == request.POST.get('username') else 1
 		return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+	
