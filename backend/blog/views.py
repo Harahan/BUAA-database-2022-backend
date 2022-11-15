@@ -97,10 +97,10 @@ def delete(request):
 # 404 if request method is not GET
 # the domains of image and userPhoto are not exist
 def fetch_one(request):
-	if request.method == 'GET':
-		if User.objects.filter(username=request.GET.get('author_Name')).exists():
-			article = Article.objects.filter(authorName=User.objects.get(username=request.GET.get('author_Name')),
-											 title=request.GET.get('tit'))
+	if request.method == 'POST':
+		if User.objects.filter(username=request.POST.get('author_Name')).exists():
+			article = Article.objects.filter(authorName=User.objects.get(username=request.POST.get('author_Name')),
+											 title=request.POST.get('tit'))
 			# print("ddd")
 			if article:
 				serializer = ArticleSerializer(article, many=True)  # may be not only one article

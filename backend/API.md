@@ -304,7 +304,7 @@
 
 * ``blog/fetchOne/``
 
-  ``GET``
+  ``POST``
 
   ```python
   I:
