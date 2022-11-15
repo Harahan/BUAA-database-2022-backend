@@ -23,7 +23,15 @@
           "username": xx,
           "email": xx,
           "avatar": xx,
-          "date_joined": xx
+          "date_joined": xx,
+          "question": xx,
+          "answer": xx,
+          "last_name": xx,
+          "first_name": xx,
+          "age": xx,
+          "country": xx,
+          "tot_like": xx,
+          "tot_dislike": xx
       }
       
       # fail
@@ -154,7 +162,15 @@
           "username": xx,
           "email": xx,
           "avatar": xx,
-          "date_joined": xx
+          "date_joined": xx，
+          "question": xx,
+          "answer": xx,
+          "last_name": xx,
+          "first_name": xx,
+          "age": xx,
+          "country": xx,
+          "tot_like": xx,
+          "tot_dislike": xx
       }
       
       # fail
@@ -496,3 +512,4 @@
 * 2022/11/13/17:00：对于``blog``而言调整``fetchOne``格式与``fetchAll``格式一致，完成``sendMoment``，大改完成``fetchAll``（``blog``）
 * 2022/11/13/23:00：调整``sendMoment``
 * 2022/11/14/21:00:	完成``getChats``、``findUser``、``getRecords``、``sendRecord``
+* 2022/11/15/18:00: 加入``comment``、``like``、``dislike``，修改``profile``相关接口
