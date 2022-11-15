@@ -96,6 +96,7 @@ def delete(request):
 # fetch an article
 # 404 if request method is not GET
 # the domains of image and userPhoto are not exist
+@csrf_exempt
 def fetch_one(request):
 	if request.method == 'POST':
 		if User.objects.filter(username=request.POST.get('author_Name')).exists():
