@@ -161,6 +161,7 @@
   
   O:
       # success
+      # 0, 1
       {
           "code": x,
           "id": xx,
@@ -179,13 +180,14 @@
       }
       
       # fail
+      # 1
       {
           "code": x
       } 
   
   # code:
   # 0 --> success
-  # 1 --> you should sign in before
+  # 1 --> username is "" or username is not the user who is enquirying
   ```
 
 ## SHOP
