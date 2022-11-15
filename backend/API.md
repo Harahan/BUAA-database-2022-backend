@@ -590,6 +590,8 @@
 
 ## RESPONSE
 
+**前端检查登陆**
+
 * ``response/addOrCancelLike/``
 
   如果没有喜欢则喜欢反之则取消
@@ -600,14 +602,7 @@
   I:
       {
           "obj_type": xx, # 0, 1, 2, 3, 4
-          "obj_id": xx,
-          "username": xx
-      }
-      
-      
-  O:
-      {
-          "obj"
+          "obj_id": xx
       }
       
   # ---------------------------------
@@ -626,13 +621,63 @@
 
   ``POST``
 
+  ```python
+  I:
+      {
+          "obj_type": xx, # 0, 1, 2, 3, 4
+          "obj_id": xx
+      }
+      
+  # ---------------------------------
+  #		(obj_type, obj)
+  #     ====================
+  #		(0, 'moment'),
+  #		(1, 'article'),
+  #		(2, 'comment'),
+  #		(3, 'merchandise'),
+  #		(4, 'user'),
+  ```
+
 * ``response/addComment/``
 
   ``POST``
 
+  ```python
+  I:
+      {
+          "obj_type": xx, # 0, 1, 2, 3, 4
+          "obj_id": xx,
+          "content": xx
+      }
+      
+  # ---------------------------------
+  #		(obj_type, obj)
+  #     ====================
+  #		(0, 'moment'),
+  #		(1, 'article'),
+  #		(2, 'merchandise'),
+  ```
+
 * ``response/delComment/``
 
   ``POST``
+
+  ```python
+  I:
+      {
+          "obj_type": xx, # 0, 1, 2, 3, 4
+          "obj_id": xx,
+      }
+      
+  # ---------------------------------
+  #		(obj_type, obj)
+  #     ====================
+  #		(0, 'moment'),
+  #		(1, 'article'),
+  #		(2, 'merchandise'),
+  ```
+
+  
 
 
 ------
@@ -644,4 +689,4 @@
 * 2022/11/13/23:00：调整``sendMoment``
 * 2022/11/14/21:00:	完成``getChats``、``findUser``、``getRecords``、``sendRecord``
 * 2022/11/15/18:00: 加入``comment``、``like``、``dislike``，修改``profile``相关接口
-* 2022/11/15/21:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``
+* 2022/11/15/21:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``，明天继续完善``response``，暂时只有数据库没有可用``api``
