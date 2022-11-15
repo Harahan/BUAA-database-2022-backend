@@ -154,6 +154,11 @@
   ``GET``
 
   ```python
+  I:
+      {
+          "username": xx
+      }
+  
   O:
       # success
       {
@@ -689,4 +694,4 @@
 * 2022/11/13/23:00：调整``sendMoment``
 * 2022/11/14/21:00:	完成``getChats``、``findUser``、``getRecords``、``sendRecord``
 * 2022/11/15/18:00: 加入``comment``、``like``、``dislike``，修改``profile``相关接口
-* 2022/11/15/21:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``，明天继续完善``response``，暂时只有数据库没有可用``api``
+* 2022/11/15/23:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``，明天继续完善``response``，暂时只有数据库没有可用``api``，修改``getProfile``

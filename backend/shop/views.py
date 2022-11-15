@@ -11,7 +11,7 @@ from .serializers import MerchandiseSerializer
 # fetch all products
 # 404 if request method is not GET
 # image domain is not exist
-def fetchAll(request):
+def fetch_all(request):
 	if request.method == 'GET':
 		merchandises = Merchandise.objects.all()
 		if merchandises:
