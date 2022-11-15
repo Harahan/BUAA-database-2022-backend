@@ -29,7 +29,7 @@ def signup(request):
 			user = User.objects.create_user(username=username, password=password)
 			user.save()
 			return JsonResponse({'code': 0}, status=status.HTTP_200_OK)
-		
+	
 	return JsonResponse({'code': 2}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -132,4 +132,3 @@ def get_profile(request):
 		serializer.data['code'] = 0 if request.user.is_authenticated and \
 									   request.user.username == request.POST.get('username') else 1
 		return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-	
