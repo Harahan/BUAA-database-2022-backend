@@ -11,7 +11,8 @@ from .models import User, Follow
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'email', 'avatar', 'date_joined', 'tot_like', 'tot_dislike')
+		fields = ('id', 'username', 'email', 'avatar', 'date_joined', 'tot_like', 'tot_dislike', 'last_name', 'first_name',
+				  'question', 'answer', 'country', 'age')
 		
 	def to_representation(self, instance):
 		data = super().to_representation(instance)

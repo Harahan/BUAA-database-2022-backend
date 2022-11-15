@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -20,6 +22,13 @@ class User(AbstractUser):
 
 	def __str__(self):
 		return self.username
+	
+	def save(self, *args, **kwargs):
+		if self.answer:
+			md5 = hashlib.md5()
+			md5.update(self.answer.encode())
+			self.answer = md5.hexdigest()
+		super().save(*args, **kwargs)
 	
 	
 class Follow(models.Model):
