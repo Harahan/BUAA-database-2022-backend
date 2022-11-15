@@ -162,4 +162,20 @@ def post_article(request):
 			if not AreaWithArticle.objects.filter(area=area, article=article).exists():
 				AreaWithArticle.objects.create(article=article, area=area)
 		return JsonResponse({'code': 0}, status=status.HTTP_200_OK)
-			
+	
+	
+# fetch articles for the user
+@csrf_exempt
+def fetch_user_articles(request):
+	if request.method == 'POST':
+		# frontend should check if the user is logged in
+		user = request.user
+		# print(user.is_authenticated)
+		articles = Article.objects.filter(authorName=user)
+		if not articles:
+			return JsonResponse([], safe=False)
+		serializer = ArticleSerializer(articles, many=True)
+		op = request.POST['op']
+		serializer_data = sorted(serializer.data, key=lambda x: x['originalTime'], reverse=True if int(op) == 0 else False)
+		return JsonResponse(serializer_data, safe=False)
+	
