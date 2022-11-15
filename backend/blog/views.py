@@ -63,7 +63,7 @@ def fetch_all(request):
 				return JsonResponse([], safe=False)
 		serializer = ArticleSerializer(articles, many=True)
 		# serializer.data.sort(key=lambda x: x['releaseTime'], reverse=True)
-		serializer_data = sorted(serializer.data, key=lambda x: x['releaseTime'], reverse=True)
+		serializer_data = sorted(serializer.data, key=lambda x: x['originalTime'], reverse=True)
 		return JsonResponse(serializer_data, safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 	

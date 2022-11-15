@@ -10,7 +10,7 @@ from backend.settings import WEB_HOST_MEDIA_URL
 class MomentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = models.Moment
-		fields = ('content', 'id')
+		fields = ('content', 'id', 'tot_like', 'tot_comment', 'tot_dislike')
 	
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
@@ -19,11 +19,11 @@ class MomentSerializer(serializers.ModelSerializer):
 		# change the format of time
 		t = timezone.now() - time
 		if timezone.timedelta(hours=1) <= t < timezone.timedelta(days=1):
-			data['time'] = str(t.seconds // 3600) + "小时前"
+			data['time'] = str(t.seconds // 3600) + " hours ago"
 		elif timezone.timedelta(minutes=1) < t < timezone.timedelta(hours=1):
-			data['time'] = str(t.seconds // 60) + "分钟前"
+			data['time'] = str(t.seconds // 60) + " minutes ago"
 		elif timezone.timedelta(minutes=1) >= t:
-			data['time'] = "刚刚"
+			data['time'] = "just now"
 		else:
 			data['time'] = time.strftime('%Y-%m-%d')
 		# print(data)

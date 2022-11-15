@@ -16,6 +16,9 @@ class Article(models.Model):
 	# digest = models.TextField()  # actually this is the article's content
 	html = models.FileField(upload_to='article/html', default='article/html/default.html')
 	cover = models.TextField(default=os.path.join(WEB_HOST_MEDIA_URL, 'article/picture/default.jpg'))
+	tot_like = models.IntegerField(default=0)
+	tot_comment = models.IntegerField(default=0)
+	tot_dislike = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.title

@@ -20,13 +20,14 @@ class ArticleSerializer(serializers.ModelSerializer):
 		# change the format of releaseTime
 		t = timezone.now() - releaseTime
 		if timezone.timedelta(hours=1) <= t < timezone.timedelta(days=1):
-			data['releaseTime'] = str(t.seconds // 3600) + "小时前"
+			data['releaseTime'] = str(t.seconds // 3600) + " hours ago"
 		elif timezone.timedelta(minutes=1) < t < timezone.timedelta(hours=1):
-			data['releaseTime'] = str(t.seconds // 60) + "分钟前"
+			data['releaseTime'] = str(t.seconds // 60) + " minutes ago"
 		elif timezone.timedelta(minutes=1) >= t:
-			data['releaseTime'] = "刚刚"
+			data['releaseTime'] = "just now"
 		else:
 			data['releaseTime'] = releaseTime.strftime('%Y-%m-%d')
+		data['originalTime'] = instance.releaseTime  # to compare the time
 		data['authorName'] = instance.authorName.username
 		if AreaWithArticle.objects.filter(article=instance).exists():
 			data['categories'] = [a.area.areaName for a in AreaWithArticle.objects.filter(article=instance)]

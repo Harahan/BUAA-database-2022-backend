@@ -101,11 +101,19 @@ def fix_profile(request):
 			user.username = request.POST.get('username')
 		if request.POST.get('password'):
 			user.set_password(request.POST.get('password'))
-		if request.FILES.get('avatar'):
+		if request.FILES.get('file'):
 			try:
-				user.avatar = request.FILES.get('avatar')
+				user.avatar = request.FILES.get('file')
 			except Exception:
 				return JsonResponse({'code': 4}, status=status.HTTP_200_OK)
+		if request.POST.get('firstname'):
+			user.first_name = request.POST.get('firstname')
+		if request.POST.get('lastname'):
+			user.last_name = request.POST.get('lastname')
+		if request.POST.get('age'):
+			user.age = request.POST.get('age')
+		if request.POST.get('country'):
+			user.country = request.POST.get('country')
 		user.save()
 		auth.login(request, user)
 		return JsonResponse({'code': 0}, status=status.HTTP_200_OK)
