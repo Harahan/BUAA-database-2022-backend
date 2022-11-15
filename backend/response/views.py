@@ -12,17 +12,29 @@ from user.models import User
 @csrf_exempt
 def add_comment(request):
 	if request.method == 'POST':
-		pass
-	
+		obj_id = request.POST.get('obj_id')
+		obj_type = request.POST.get('obj_type')
+		
+
 	
 @csrf_exempt
-def add_like(request):
+def add_or_cancel_like(request):
 	if request.method == 'POST':
-		pass
+		obj_id = request.POST.get('obj_id')
+		obj_type = request.POST.get('obj_type')
+		username = request.POST.get('username')
+		user = User.objects.get(username=username)
+		
 	
 
 @csrf_exempt
-def add_dislike(request):
+def add_or_cancel_dislike(request):
+	if request.method == 'POST':
+		pass
+	
+	
+@csrf_exempt
+def del_comment(request):
 	if request.method == 'POST':
 		pass
 	

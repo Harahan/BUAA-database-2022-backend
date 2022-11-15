@@ -7,4 +7,5 @@ urlpatterns = [
 	path('fetchOne/', views.fetch_one),
 	path('uploadPicture/', views.upload_picture),
 	path('postArticle/', views.post_article),
+	path('fetchUserArticles/', views.fetch_user_articles),
 ]

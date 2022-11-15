@@ -193,9 +193,49 @@
   O:  
       [
           {
+              "id": xx,
               "name": xx,
               "image": xx,
-              "price": xx
+              "price": xx,
+              "time": xx,
+              "username": xx,
+              "tot_like": xx,
+              "tot_dislike": xx,
+              "tot_comment": xx
+          }
+          {
+              ...
+          }
+          ...
+       ]
+  ```
+  
+  找不到全为空
+
+* ``shop/fetchUserMerchandises/``
+
+  ``POST``
+
+  前端确保用户为登陆状态
+
+  ```python
+  I:
+      {
+          "op": xx # 0: descend, 1: ascend
+      }
+  
+  O:  
+      [
+          {
+              "id": xx,
+              "name": xx,
+              "image": xx,
+              "price": xx,
+              "time": xx,
+              "username": xx,
+              "tot_like": xx,
+              "tot_dislike": xx,
+              "tot_comment": xx
           }
           {
               ...
@@ -204,7 +244,7 @@
        ]
   ```
 
-  找不到全为空
+  
 
 ## BLOG
 
@@ -241,7 +281,11 @@
               "digest": xx,
               "userPhoto": xx,
               "cover": xx,
-              "html": xx
+              "html": xx,
+              "id": xx,
+              "tot_like": xx,
+              "tot_dislike": xx,
+              "tot_comment": xx
           }
           {
               ...
@@ -272,7 +316,11 @@
           "digest": xx,
           "userPhoto": xx,
           "cover": xx,
-          "html": xx
+          "html": xx,
+          "id": xx,
+          "tot_like": xx,
+          "tot_dislike": xx,
+          "tot_comment": xx
       }
   ```
 
@@ -349,6 +397,43 @@
 
   ``tags``：xxx,xxx,xxx,xxx
 
+* ``blog/fetchUserArticles/``
+
+  ``POST``
+
+  前端检查登陆
+
+  ```python
+  I:
+      {
+          "op": xx # 0: descend, 1: ascend 
+      }
+      
+  O:
+  	[
+          {
+             "authorName": xx,
+              "releaseTime": xx,
+              "categories": [xx, yy ...], # maybe is an empty list
+              "title": xx,
+              "digest": xx,
+              "userPhoto": xx,
+              "cover": xx,
+              "html": xx,
+              "id": xx,
+              "tot_like": xx,
+              "tot_dislike": xx,
+              "tot_comment": xx
+      	}
+          {
+              ...
+          }
+          ...
+      ]
+  ```
+
+  
+
 ## MOMENT
 
 * ``moment/sendMoment``
@@ -372,7 +457,11 @@
                   "username": xxx,
                   "avatar": xxx,
                   "content": xxx,
-                  "time": xxx
+                  "time": xxx,
+                  "id": xx,
+                  "tot_like": xx,
+                  "tot_dislike": xx,
+                  "tot_comment": xx
               }
               {
                   ....
@@ -458,7 +547,7 @@
   O:
       [
           {
-              "sender": xxx, # the user loging in now
+              "sender": xxx, # the user loging in now: 0, other: 1
               "username": xxx,
               "avatar": xxx,
               "content": xxx,
@@ -501,7 +590,49 @@
 
 ## RESPONSE
 
+* ``response/addOrCancelLike/``
 
+  如果没有喜欢则喜欢反之则取消
+
+  ``POST``
+
+  ```python
+  I:
+      {
+          "obj_type": xx, # 0, 1, 2, 3, 4
+          "obj_id": xx,
+          "username": xx
+      }
+      
+      
+  O:
+      {
+          "obj"
+      }
+      
+  # ---------------------------------
+  #		(obj_type, obj)
+  #     ====================
+  #		(0, 'moment'),
+  #		(1, 'article'),
+  #		(2, 'comment'),
+  #		(3, 'merchandise'),
+  #		(4, 'user'),
+  ```
+
+  
+
+* ``response/addOrCancelDisLike/``
+
+  ``POST``
+
+* ``response/addComment/``
+
+  ``POST``
+
+* ``response/delComment/``
+
+  ``POST``
 
 
 ------
@@ -513,3 +644,4 @@
 * 2022/11/13/23:00：调整``sendMoment``
 * 2022/11/14/21:00:	完成``getChats``、``findUser``、``getRecords``、``sendRecord``
 * 2022/11/15/18:00: 加入``comment``、``like``、``dislike``，修改``profile``相关接口
+* 2022/11/15/21:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``
