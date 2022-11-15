@@ -151,7 +151,7 @@
 
 * ``user/getProfile``
 
-  ``GET``
+  ``POST``
 
   ```python
   I:
