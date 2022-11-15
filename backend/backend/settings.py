@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'shop',
     'moment',
     'chat',
+    'response',
     
     'django.contrib.admin',
     'django.contrib.auth',

@@ -10,7 +10,7 @@ from backend.settings import WEB_HOST_MEDIA_URL
 class MomentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = models.Moment
-		fields = ('content', 'id')
+		fields = ('content', 'id', 'tot_like', 'tot_comment', 'tot_dislike')
 	
 	def to_representation(self, instance):
 		data = super().to_representation(instance)

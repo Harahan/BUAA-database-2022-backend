@@ -117,9 +117,13 @@
           "username": xx,
           "password": xx,
           "email": xx,
-          "avatar": xx,
+          "file": xx, # avatar
           "question": xx,
-          "answer": xx
+          "answer": xx,
+          "lastname": xx,
+          "firstname": xx,
+          "age": xx,
+          "country": xx
       }
   
   O:
@@ -478,6 +482,10 @@
       ]
   ```
   
+
+## RESPONSE
+
+
 
 
 ------

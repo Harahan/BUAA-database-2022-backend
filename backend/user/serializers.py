@@ -11,7 +11,7 @@ from .models import User, Follow
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'email', 'avatar', 'date_joined')
+		fields = ('id', 'username', 'email', 'avatar', 'date_joined', 'tot_like', 'tot_dislike')
 		
 	def to_representation(self, instance):
 		data = super().to_representation(instance)
@@ -27,6 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 			data['date_joined'] = "just now"
 		else:
 			data['date_joined'] = date_joined.strftime('%Y-%m-%d')
+		data['originalDateJoined'] = instance.date_joined  # to compare the time
 		data['code'] = 0
 		urls = os.path.join(WEB_HOST_MEDIA_URL, str(instance.avatar))
 		data['avatar'] = urls

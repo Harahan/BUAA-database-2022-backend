@@ -33,7 +33,7 @@ def find_user(request):
 		chat_id = request.GET.get('id')
 		username = request.GET.get('username')
 		if Record.objects.filter(chat=chat_id, user__username=username).exists():
-			latest = Record.objects.filter(chat=chat_id, user__username=username).order_by('-time').first()
+			latest = Record.objects.filter(chat=chat_id, user__username=username).order_by('-originalTime').first()
 			serializer = RecordSerializer(latest)
 			return JsonResponse(serializer.data, safe=False)
 		else:
@@ -44,7 +44,7 @@ def get_records(request):
 	if request.method == 'GET':
 		chat_id = request.GET.get('id')
 		if Record.objects.filter(chat=chat_id).exists():
-			records = Record.objects.filter(chat=chat_id).order_by('-time')
+			records = Record.objects.filter(chat=chat_id).order_by('-originalTime')
 			serializer = RecordSerializer(records, many=True)
 			rt = []
 			for s in serializer.data:
@@ -66,7 +66,7 @@ def send_record(request):
 		record = Record.objects.create(chat=chat, user=request.user, content=content)
 		record.save()
 		# serializer = RecordSerializer(record)
-		records = Record.objects.filter(chat=chat_id).order_by('-time')
+		records = Record.objects.filter(chat=chat_id).order_by('-originalTime')
 		serializer = RecordSerializer(records, many=True)
 		rt = []
 		for s in serializer.data:

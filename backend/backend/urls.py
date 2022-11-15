@@ -25,6 +25,7 @@ urlpatterns = [
     path('shop/', include('shop.urls')),
     path('moment/', include('moment.urls')),
     path('chat/', include('chat.urls')),
+    path('response/', include('response.urls')),
 ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
