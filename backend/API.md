@@ -216,12 +216,11 @@
 
   ``POST``
 
-  前端确保用户为登陆状态
-
   ```python
   I:
       {
-          "op": xx # 0: descend, 1: ascend
+          "op": xx, # 0: descend, 1: ascend
+          "username": xx
       }
   
   O:  
@@ -406,7 +405,8 @@
   ```python
   I:
       {
-          "op": xx # 0: descend, 1: ascend 
+          "op": xx, # 0: descend, 1: ascend 
+          "username": xx
       }
       
   O:

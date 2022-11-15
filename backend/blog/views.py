@@ -168,8 +168,9 @@ def post_article(request):
 @csrf_exempt
 def fetch_user_articles(request):
 	if request.method == 'POST':
-		# frontend should check if the user is logged in
-		user = request.user
+		if not User.objects.filter(username=request.POST['username']).exists():
+			return JsonResponse([], safe=False)
+		user = User.objects.get(username=request.POST.get('username'))
 		# print(user.is_authenticated)
 		articles = Article.objects.filter(authorName=user)
 		if not articles:

@@ -2,7 +2,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-
+from user.models import User
 from .models import Merchandise
 from .serializers import MerchandiseSerializer
 # Create your views here.
@@ -25,8 +25,9 @@ def fetchAll(request):
 @csrf_exempt
 def fetch_user_merchandises(request):
 	if request.method == 'POST':
-		# frontend should check if user is authenticated
-		user = request.user
+		if not User.objects.filter(username=request.POST.get('username')).exists():
+			return JsonResponse([], safe=False)
+		user = User.objects.get(username=request.POST.get('username'))
 		merchandises = Merchandise.objects.filter(username=user)
 		if not merchandises:
 			return JsonResponse([], safe=False)
