@@ -151,7 +151,6 @@ WEB_HOST_MEDIA_URL = 'http://127.0.0.1:8000' + MEDIA_URL
 
 # -------------- simpleui --------------
 SIMPLEUI_LOGO = WEB_HOST_MEDIA_URL + 'avatar/default.jpg'
-# 隐藏右侧SimpleUI广告链接和使用分析
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
 

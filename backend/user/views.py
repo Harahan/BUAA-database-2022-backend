@@ -122,9 +122,7 @@ def fix_profile(request):
 
 def get_profile(request):
 	if request.method == 'GET':
-		if not request.user.is_authenticated:
-			return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
-		user = request.user
+		user = User.objects.get(username=request.GET.get('username'))
 		serializer = UserSerializer(user)
 		serializer.data['code'] = 0
 		return JsonResponse(serializer.data, status=status.HTTP_200_OK)
