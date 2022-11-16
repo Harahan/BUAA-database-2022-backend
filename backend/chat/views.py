@@ -5,29 +5,58 @@ from .serializers import ChatSerializer, RecordSerializer
 # Create your views here.
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
+from fuzzywuzzy import fuzz
+from user.models import User
 
 
 def get_chats(request):
 	if request.method == 'GET':
 		if not request.user.is_authenticated:
 			return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
-		
-		user = request.user
-		if user.chat_member.exists():
-			# print(user.chat_member.all())
-			# print(user)
-			chats = user.chat_member.all()
-			serializer = ChatSerializer(chats, many=True, allow_null=True)
-			rt = []
-			for data in serializer.data:
-				if data['latest']:
-					rt.append(data)
-			rt.sort(key=lambda x: x['latest']['originalTime'], reverse=True)
-			return JsonResponse(rt, safe=False)
+		if not request.GET.get('name'):
+			user = request.user
+			if user.chat_member.exists():
+				# print(user.chat_member.all())
+				# print(user)
+				chats = user.chat_member.all()
+				serializer = ChatSerializer(chats, many=True, allow_null=True)
+				rt = []
+				for data in serializer.data:
+					if data['latest']:
+						rt.append(data)
+				rt.sort(key=lambda x: x['latest']['originalTime'], reverse=True)
+				return JsonResponse(rt, safe=False)
+			else:
+				return JsonResponse([], safe=False)
 		else:
-			return JsonResponse([], safe=False)
-		
-		
+			name = request.GET.get('name')
+			rt = []
+			if Chat.objects.filter(name=name, type="group").exists():
+				chats = Chat.objects.filter(name=name, type="group")
+				serializer = ChatSerializer(chats, many=True)
+				for data in serializer.data:
+					rt.append(data)
+			if Chat.objects.filter(member__username=name, type="private").exists():
+				chats = Chat.objects.filter(member__username=name, type="private")
+				serializer = ChatSerializer(chats, many=True)
+				for data in serializer.data:
+					rt.append(data)
+			if rt:
+				# rt.sort(key=lambda x: x['latest']['originalTime'], reverse=True)
+				return JsonResponse(rt, safe=False)
+			else:
+				for chat in Chat.objects.all():
+					if chat.type == "group" and fuzz.ratio(chat.name, name) > 70:
+						rt.append(ChatSerializer(chat).data)
+					if chat.type == "private":
+						for member in chat.member.all():
+							if fuzz.ratio(member.username, name) > 70:
+								rt.append(ChatSerializer(chat).data)
+								break
+				return JsonResponse(rt, safe=False)
+
+			
+''''
 def find_user(request):
 	if request.method == 'GET':
 		chat_id = request.GET.get('id')
@@ -38,6 +67,23 @@ def find_user(request):
 			return JsonResponse(serializer.data, safe=False)
 		else:
 			return JsonResponse({}, safe=False)
+'''
+
+
+@csrf_exempt
+def create_chat(request):
+	if request.method == 'POST':
+		if not request.user.is_authenticated:
+			return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
+		if not request.POST.get('name'):
+			chat = Chat.objects.create(name="", type="private", owner=request.user)
+		else:
+			chat = Chat.objects.create(name=request.POST.get('name'), type="group", owner=request.user)
+		for username in request.POST.get('username').split(','):
+			user = User.objects.get(username=username)
+			chat.member.add(user)
+		chat.save()
+		return JsonResponse(ChatSerializer(chat).data, safe=False)
 		
 		
 def get_records(request):

@@ -146,49 +146,48 @@
   # 3 --> user should sign in before
   # 4 --> avatar upload error
   ```
-
+  
   只有``code``为$0$，数据库发生修改
 
 * ``user/getProfile``
 
   ``POST``
-
+  
   ```python
   I:
-      {
-          "username": xx
-      }
-  
+        {
+            "username": xx
+        }
+    
   O:
-      # success
-      # 0, 1
-      {
-          "code": x,
-          "id": xx,
-          "username": xx,
-          "email": xx,
-          "avatar": xx,
-          "date_joined": xx，
-          "question": xx,
-          "answer": xx,
-          "last_name": xx,
-          "first_name": xx,
-          "age": xx,
-          "country": xx,
-          "tot_like": xx,
-          "tot_dislike": xx
-      }
-      
-      # fail
-      # 1
-      {
-          "code": x
-      } 
-  
-  # code:
-  # 0 --> success
-  # 1 --> username is "" or username is not the user who is enquirying
-  ```
+        # success
+        # 0, 1
+        {
+            "code": x,
+            "id": xx,
+            "username": xx,
+            "email": xx,
+            "avatar": xx,
+            "date_joined": xx，
+            "question": xx,
+            "answer": xx,
+            "last_name": xx,
+            "first_name": xx,
+            "age": xx,
+            "country": xx,
+            "tot_like": xx,
+            "tot_dislike": xx
+        }
+        
+        # fail
+        # 1
+        {
+            "code": x
+        } 
+    
+    # code:
+    # 0 --> success
+    # 1 --> username is "" or username is not the user who is enquirying
 
 ## SHOP
 
@@ -496,8 +495,17 @@
   ``GET``
 
   **注意存``id``！！！！**
+  
+  如果``name``是空的话就返回所有和当前登陆用户聊过天的对话；
+  
+    反之进行模糊匹配，返回所有差不多的对话；
+  
 
   ```python
+  I:
+      {
+          "name": xxx
+      }
   O:
       [
           {
@@ -521,26 +529,35 @@
       ]
   ```
 
-* ``chat/findUser/``
+* ``chat/createChat/``
+    如果只有一个人则创建私聊，反之创建群聊
 
-  ``GET``
+  ``POST``
 
   ```python
-  I:
+   I:
       {
-          "id": xx, # group(private or group) id
-          "username": xxx
+          "username": xxx,yyy,zzz,
+          "name":xxx #group name #"" if the chat is a private chat 
       }
-  
-  O:	
+      
+  O:
       {
-          "username": xx,
-          "avatar": xx,
-          "content": xxx, # latest 
-          "time": xxx
-      }
-  ```
-
+              "id": xxx, # private chat(group chat) id
+              "type": xxx, # private chat(group chat)
+              "name": xxx, # "" if the chat is a private chat 
+              "time": xxx, # creating time
+              "owner": xxx, # sponsor
+              "avatar": xxx,
+          	"latest": { # maybe is {}
+                  "username": xxx,
+                    "content": xxx,
+                    "avatar": xxx,
+                    "time": xxx
+                }
+        }
+    ```
+    
 * ``group/getRecords/``
 
   ``GET``
@@ -599,9 +616,7 @@
 
 **前端检查登陆**
 
-* ``response/addOrCancelLike/``
-
-  如果没有喜欢则喜欢反之则取消
+* ``response/takeStance/``
 
   ``POST``
 
@@ -610,6 +625,13 @@
       {
           "obj_type": xx, # 0, 1, 2, 3, 4
           "obj_id": xx
+          "stance": 1/0/-1
+      }
+      
+  O:
+      {
+          "tot_like": xxx,
+          "tot_dislike": xxx
       }
       
   # ---------------------------------
@@ -620,30 +642,15 @@
   #		(2, 'comment'),
   #		(3, 'merchandise'),
   #		(4, 'user'),
+  #  ----------------------------------
+  # 		(stance_id, stance)
+  #	=============================
+  # 		(0, 'neutral')
+  #		(1, 'support')
+  #		(-1, 'oppo')
   ```
 
   
-
-* ``response/addOrCancelDisLike/``
-
-  ``POST``
-
-  ```python
-  I:
-      {
-          "obj_type": xx, # 0, 1, 2, 3, 4
-          "obj_id": xx
-      }
-      
-  # ---------------------------------
-  #		(obj_type, obj)
-  #     ====================
-  #		(0, 'moment'),
-  #		(1, 'article'),
-  #		(2, 'comment'),
-  #		(3, 'merchandise'),
-  #		(4, 'user'),
-  ```
 
 * ``response/addComment/``
 
@@ -664,7 +671,7 @@
   #		(1, 'article'),
   #		(2, 'merchandise'),
   ```
-
+  
 * ``response/delComment/``
 
   ``POST``
@@ -697,3 +704,4 @@
 * 2022/11/14/21:00:	完成``getChats``、``findUser``、``getRecords``、``sendRecord``
 * 2022/11/15/18:00: 加入``comment``、``like``、``dislike``，修改``profile``相关接口
 * 2022/11/15/23:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``，明天继续完善``response``，暂时只有数据库没有可用``api``，修改``getProfile``
+* 2022/11/16/20:30: 修改`getChats`，新增`createChat`，删除``findUser``，完成``takeStance``

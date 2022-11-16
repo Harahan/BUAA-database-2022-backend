@@ -11,6 +11,8 @@ from .models import Article, Area, AreaWithArticle
 from .serializers import ArticleSerializer
 from backend.settings import WEB_HOST_MEDIA_URL, MEDIA_ROOT
 from fuzzywuzzy import fuzz
+from PIL import Image
+import os
 # Create your views here.
 
 
