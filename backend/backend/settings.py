@@ -22,9 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bb28(%c)s0jlzuu_^+x+&vefl(dect%)!vucj(-z#vn)&h_s7a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ['http://39.106.5.232']
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Application definition
 
@@ -145,7 +148,7 @@ AUTH_USER_MODEL = 'user.User'
 # -------------- file path --------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
-WEB_HOST_MEDIA_URL = 'http://127.0.0.1:8000' + MEDIA_URL
+WEB_HOST_MEDIA_URL = 'http://localhost:8000' + MEDIA_URL
 # print(WEB_HOST_MEDIA_URL)
 # print(MEDIA_ROOT)
 
