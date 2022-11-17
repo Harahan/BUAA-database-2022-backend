@@ -148,7 +148,7 @@ AUTH_USER_MODEL = 'user.User'
 # -------------- file path --------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
-WEB_HOST_MEDIA_URL = 'http://localhost:8000' + MEDIA_URL
+WEB_HOST_MEDIA_URL = 'http://39.106.5.232' + MEDIA_URL
 # print(WEB_HOST_MEDIA_URL)
 # print(MEDIA_ROOT)
 
