@@ -125,7 +125,7 @@ def get_profile(request):
 	if request.method == 'POST':
 		if not request.POST.get('username'):
 			if request.user.is_authenticated:
-				return JsonResponse(UserSerializer(request.user).data, status=status.HTTP_200_OK);
+				return JsonResponse(UserSerializer(User.objects.get(username=request.user.username)).data, status=status.HTTP_200_OK)
 			return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
 		user = User.objects.get(username=request.POST.get('username'))
 		serializer = UserSerializer(user)

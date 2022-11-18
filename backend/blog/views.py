@@ -152,10 +152,11 @@ def post_article(request):
 								   title=request.POST['title'],
 								   html=request.FILES.get('html'))
 		else:
+			cover = request.POST['cover'].split('/')[-1]
 			Article.objects.create(authorName=user,
 								   title=request.POST['title'],
 								   html=request.FILES.get('html'),
-								   cover=request.POST['cover'])
+								   cover='article/picture/' + cover)
 		tags = request.POST['tags'].split(',')
 		for tag in tags:
 			if not Area.objects.filter(areaName=tag).exists():

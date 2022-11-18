@@ -35,5 +35,6 @@ class ArticleSerializer(serializers.ModelSerializer):
 		file = open(instance.html.path, 'r', encoding='utf-8').read()
 		data['digest'] = HTMLParser(file).text().replace('\n', '').replace('\t', '').replace('\r', '').replace(' ', '')
 		data['html'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.html))
+		data['cover'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.cover))
 		return data
 		
