@@ -215,18 +215,28 @@
           ...
        ]
   ```
-  
+
   找不到全为空
 
-* ``shop/fetchUserMerchandises/``
+* ``blog/fetchUserMerchandises/``
 
   ``POST``
+
+  前端检查登陆
 
   ```python
   I:
       {
-          "op": xx, # 0: descend, 1: ascend
-          "username": xx
+          "username": xx,
+          # sort
+          "op": xx, # 0: newest, 1: rank:Hight-Low, 2: price:Hight-Low, 3: price:Low-High
+          # filters
+          "sale": xx, # bool
+          "new": xx, # bool
+          "category": xx, # "" for all
+          "color": xx, # "" for all
+          "priceSale": xx, # 0: priceSale<=25, 1: 25<priceSale<=75, 2: priceSale>75
+          "rank": xx, # rank>=xx
       }
   
   O:  
@@ -234,13 +244,23 @@
           {
               "id": xx,
               "name": xx,
+              "description": xx,
               "image": xx,
+              "deliveryLocation": xx,
+              "deliveryTime": xx,
               "price": xx,
               "time": xx,
               "username": xx,
               "tot_like": xx,
               "tot_dislike": xx,
-              "tot_comment": xx
+              "rank": xx, # 0~5 caculate from tot_like and tot_dislike
+              "color": [xx, xx, ...] 
+              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', 
+              				'#FF4842', '#1890FF', '#94D82D', '#FFC107']
+              				
+              "priceSale": xx, 
+              "status": xx, # 0: normal, 1: sale, 2: new
+              "category": xx, # choose from ['food', 'clothing', 'book', 'decoration', 'digital', 'other']
           }
           {
               ...
@@ -249,7 +269,62 @@
        ]
   ```
 
+* ``shop/postMerchandise/``
+
+  `POST`
+
+  ```python
+  I:
+      {
+         "image": xx,
+         "name": xx, 
+         "description": xx,
+         "price": xx,
+         "priceSale": xx,
+         "deliveryLocation": xx,
+         "deliveryTime": xx,
+         "category": xx,
+         "color": [xxx, xx],
+      }
   
+  O:  
+  ```
+
+* ``shop/getMerchandise/``
+
+  ``POST``
+
+  ```python
+  I:
+      {
+          "id": xx
+  	}
+      
+  O:
+      {
+           	"id": xx,
+              "name": xx,
+              "description": xx,
+              "image": xx,
+              "deliveryLocation": xx,
+              "deliveryTime": xx,
+              "price": xx,
+              "time": xx,
+              "username": xx,
+              "tot_like": xx,
+              "tot_dislike": xx,
+              "rank": xx, # 0~5 caculate from tot_like and tot_dislike
+              "color": [xx, xx, ...] 
+              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', 
+              				'#FF4842', '#1890FF', '#94D82D', '#FFC107']
+              				
+              "priceSale": xx, 
+              "status": xx, # 0: normal, 1: sale, 2: new
+              "category": xx, # choose from ['food', 'clothing', 'book', 'decoration', 'digital', 'other']
+      }
+  ```
+
+  ​    
 
 ## BLOG
 
@@ -410,106 +485,34 @@
 
   ```python
   I:
-      {
-          "username": xx,
-          # sort
-          "op": xx, # 0: newest, 1: rank:Hight-Low, 2: price:Hight-Low, 3: price:Low-High
-          # filters
-          "sale": xx, # bool
-          "new": xx, # bool
-          "category": xx, # "" for all
-          "color": xx, # "" for all
-          "priceSale": xx, # 0: priceSale<=25, 1: 25<priceSale<=75, 2: priceSale>75
-          "rank": xx, # rank>=xx
-      }
-  
-  O:  
-      [
-          {
-              "id": xx,
-              "name": xx,
-              "description": xx,
-              "image": xx,
-              "deliveryLocation": xx,
-              "deliveryTime": xx,
-              "price": xx,
-              "time": xx,
-              "username": xx,
-              "tot_like": xx,
-              "tot_dislike": xx,
-              "rank": xx, # 0~5 caculate from tot_like and tot_dislike
-              "color": [xx, xx, ...] 
-              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', 
-              				'#FF4842', '#1890FF', '#94D82D', '#FFC107']
-              				
-              "priceSale": xx, 
-              "status": xx, # 0: normal, 1: sale, 2: new
-              "category": xx, # choose from ['food', 'clothing', 'book', 'decoration', 'digital', 'other']
-          }
-          {
-              ...
-          }
-          ...
-       ]
+        {
+            "op": xx, # 0: descend, 1: ascend 
+            "username": xx
+        }
+        
+    O:
+    	[
+            {
+               "authorName": xx,
+                "releaseTime": xx,
+                "categories": [xx, yy ...], # maybe is an empty list
+                "title": xx,
+                "digest": xx,
+                "userPhoto": xx,
+                "cover": xx,
+                "html": xx,
+                "id": xx,
+                "tot_like": xx,
+                "tot_dislike": xx,
+                "tot_comment": xx
+        	}
+            {
+                ...
+            }
+            ...
+        ]
   ```
   
-
-* ``shop/postMerchandise/``
-
-  `POST`
-
-  ```python
-  I:
-      {
-         "image": xx,
-         "name": xx, 
-         "description": xx,
-         "price": xx,
-         "priceSale": xx,
-         "deliveryLocation": xx,
-         "deliveryTime": xx,
-         "category": xx,
-         "color": [xxx, xx],
-      }
-  
-  O:  
-  ```
-
-* ``shop/getMerchandise/``
-
-  ``POST``
-
-  ```python
-  I:
-      {
-          "id": xx
-  	}
-      
-  O:
-      {
-           	"id": xx,
-              "name": xx,
-              "description": xx,
-              "image": xx,
-              "deliveryLocation": xx,
-              "deliveryTime": xx,
-              "price": xx,
-              "time": xx,
-              "username": xx,
-              "tot_like": xx,
-              "tot_dislike": xx,
-              "rank": xx, # 0~5 caculate from tot_like and tot_dislike
-              "color": [xx, xx, ...] 
-              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', 
-              				'#FF4842', '#1890FF', '#94D82D', '#FFC107']
-              				
-              "priceSale": xx, 
-              "status": xx, # 0: normal, 1: sale, 2: new
-              "category": xx, # choose from ['food', 'clothing', 'book', 'decoration', 'digital', 'other']
-      }
-  ```
-
-  ​    
 
 ## MOMENT
 
