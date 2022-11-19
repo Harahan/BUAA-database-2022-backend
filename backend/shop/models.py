@@ -25,7 +25,7 @@ class Merchandise(models.Model):
 	
 	name = models.CharField(max_length=512)
 	image = models.ImageField(upload_to='merchandise', default='merchandise/default.jpg')
-	price = models.FloatField()
+	price = models.FloatField(default=0)
 	tot_like = models.IntegerField(default=0)
 	tot_dislike = models.IntegerField(default=0)
 	tot_comment = models.IntegerField(default=0)
