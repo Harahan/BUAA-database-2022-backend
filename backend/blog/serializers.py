@@ -29,6 +29,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 			data['releaseTime'] = releaseTime.strftime('%Y-%m-%d')
 		data['originalTime'] = instance.releaseTime  # to compare the time
 		data['authorName'] = instance.authorName.username
+		data['categories'] = []
 		if AreaWithArticle.objects.filter(article=instance).exists():
 			data['categories'] = [a.area.areaName for a in AreaWithArticle.objects.filter(article=instance)]
 		data['userPhoto'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.authorName.avatar))

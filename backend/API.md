@@ -411,34 +411,105 @@
   ```python
   I:
       {
-          "op": xx, # 0: descend, 1: ascend 
-          "username": xx
+          "username": xx,
+          # sort
+          "op": xx, # 0: newest, 1: rank:Hight-Low, 2: price:Hight-Low, 3: price:Low-High
+          # filters
+          "sale": xx, # bool
+          "new": xx, # bool
+          "category": xx, # "" for all
+          "color": xx, # "" for all
+          "priceSale": xx, # 0: priceSale<=25, 1: 25<priceSale<=75, 2: priceSale>75
+          "rank": xx, # rank>=xx
       }
-      
-  O:
-  	[
+  
+  O:  
+      [
           {
-             "authorName": xx,
-              "releaseTime": xx,
-              "categories": [xx, yy ...], # maybe is an empty list
-              "title": xx,
-              "digest": xx,
-              "userPhoto": xx,
-              "cover": xx,
-              "html": xx,
               "id": xx,
+              "name": xx,
+              "description": xx,
+              "image": xx,
+              "deliveryLocation": xx,
+              "deliveryTime": xx,
+              "price": xx,
+              "time": xx,
+              "username": xx,
               "tot_like": xx,
               "tot_dislike": xx,
-              "tot_comment": xx
-      	}
+              "rank": xx, # 0~5 caculate from tot_like and tot_dislike
+              "color": [xx, xx, ...] 
+              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', 
+              				'#FF4842', '#1890FF', '#94D82D', '#FFC107']
+              				
+              "priceSale": xx, 
+              "status": xx, # 0: normal, 1: sale, 2: new
+              "category": xx, # choose from ['food', 'clothing', 'book', 'decoration', 'digital', 'other']
+          }
           {
               ...
           }
           ...
-      ]
+       ]
+  ```
+  
+
+* ``shop/postMerchandise/``
+
+  `POST`
+
+  ```python
+  I:
+      {
+         "image": xx,
+         "name": xx, 
+         "description": xx,
+         "price": xx,
+         "priceSale": xx,
+         "deliveryLocation": xx,
+         "deliveryTime": xx,
+         "category": xx,
+         "color": [xxx, xx],
+      }
+  
+  O:  
   ```
 
-  
+* ``shop/getMerchandise/``
+
+  ``POST``
+
+  ```python
+  I:
+      {
+          "id": xx
+  	}
+      
+  O:
+      {
+           	"id": xx,
+              "name": xx,
+              "description": xx,
+              "image": xx,
+              "deliveryLocation": xx,
+              "deliveryTime": xx,
+              "price": xx,
+              "time": xx,
+              "username": xx,
+              "tot_like": xx,
+              "tot_dislike": xx,
+              "rank": xx, # 0~5 caculate from tot_like and tot_dislike
+              "color": [xx, xx, ...] 
+              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', 
+              				'#FF4842', '#1890FF', '#94D82D', '#FFC107']
+              				
+              "priceSale": xx, 
+              "status": xx, # 0: normal, 1: sale, 2: new
+              "category": xx, # choose from ['food', 'clothing', 'book', 'decoration', 'digital', 'other']
+      }
+  ```
+
+  ​    
 
 ## MOMENT
 
@@ -556,8 +627,8 @@
                     "time": xxx
                 }
         }
-    ```
-    
+  ```
+  
 * ``group/getRecords/``
 
   ``GET``
@@ -705,3 +776,4 @@
 * 2022/11/15/18:00: 加入``comment``、``like``、``dislike``，修改``profile``相关接口
 * 2022/11/15/23:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``，明天继续完善``response``，暂时只有数据库没有可用``api``，修改``getProfile``
 * 2022/11/16/20:30: 修改`getChats`，新增`createChat`，删除``findUser``，完成``takeStance``
+* 2022/11/19/22:00: 改``fetchUserMerchandises``，新增``getMerchandise``、``postMerchandise``

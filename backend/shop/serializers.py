@@ -3,7 +3,7 @@ import os
 
 from django.utils import timezone
 from rest_framework import serializers
-from .models import Merchandise
+from .models import Merchandise, COLOR
 from backend.settings import WEB_HOST_MEDIA_URL
 
 
@@ -30,4 +30,26 @@ class MerchandiseSerializer(serializers.ModelSerializer):
 			data['time'] = time.strftime('%Y-%m-%d')
 		data['originalTime'] = instance.time  # to compare the time
 		data['username'] = instance.username.username
+		# data['deliveryTime'] = instance.deliverTime.strftime('%Y-%m-%d')
+		# rank, color, status, category
+		tot = instance.tot_like + instance.tot_dislike + 2
+		data['rank'] = int((instance.tot_like + 1) / tot * 5)
+		t = int(instance.color)
+		i = 0
+		data['color'] = []
+		color = list(COLOR.keys())
+		while t != 0:
+			if (t & 1) == 1:
+				data['color'].append(color[i])
+				# print(color[i])
+			t >>= 1
+			i += 1
+		# discount status cover the new status
+		if instance.price != instance.priceSale:
+			data['status'] = 1
+		elif timezone.now() - instance.time <= timezone.timedelta(days=1):
+			data['status'] = 2
+		else:
+			data['status'] = 0
+		data["color_num"] = instance.color
 		return data
