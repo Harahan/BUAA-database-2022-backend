@@ -23,8 +23,9 @@ def fetch_all(request):
 			return JsonResponse([], safe=False)
 		if request.GET['follow'] == 'true':
 			if not request.user.is_authenticated:
-				return JsonResponse([], status=status.HTTP_200_OK)
+				return JsonResponse([], safe=False)
 			if Follow.objects.filter(follower=request.user).exists():
+				# print("kkk")
 				articles1 = articles.filter(authorName_id__in=
 										   Follow.objects.filter(follower=request.user).values_list('followee', flat=True))
 				articles = articles.filter(authorName=request.user) | articles1
@@ -66,6 +67,16 @@ def fetch_all(request):
 		serializer = ArticleSerializer(articles, many=True)
 		# serializer.data.sort(key=lambda x: x['releaseTime'], reverse=True)
 		serializer_data = sorted(serializer.data, key=lambda x: x['originalTime'], reverse=True)
+		for data in serializer_data:
+			author_name = data["authorName"]
+			# print(author_name, request.user.username)
+			if request.user.is_authenticated:
+				if Follow.objects.filter(follower__username=request.user.username, followee__username=author_name).exists():
+					data["followed"] = True
+				else:
+					data["followed"] = False
+			else:
+				data["followed"] = False
 		return JsonResponse(serializer_data, safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 	
@@ -128,6 +139,21 @@ def upload_picture(request):
 			return JsonResponse({'code': 1, 'url': ""}, status=status.HTTP_200_OK)
 		return JsonResponse({'code': 0, 'url': os.path.join(WEB_HOST_MEDIA_URL, "article/picture/" + name)}, status=status.HTTP_200_OK)
 	
+	
+@csrf_exempt
+def upload_video(request):
+	if request.method == 'POST':
+		try:
+			video = request.FILES.get('video')
+			name = get_random_str() + ".mp4"
+			filepath = MEDIA_ROOT / "article/video" / name
+			with open(filepath, 'wb') as f:
+				for info in video.chunks():
+					f.write(info)
+		except Exception:
+			return JsonResponse({'code': 1, 'url': ""}, status=status.HTTP_200_OK)
+		return JsonResponse({'code': 0, 'url': os.path.join(WEB_HOST_MEDIA_URL, "article/video/" + name)}, status=status.HTTP_200_OK)
+
 	
 def get_random_str(length=10):
 	s = ''

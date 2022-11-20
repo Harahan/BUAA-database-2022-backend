@@ -8,4 +8,5 @@ urlpatterns = [
 	path('uploadPicture/', views.upload_picture),
 	path('postArticle/', views.post_article),
 	path('fetchUserArticles/', views.fetch_user_articles),
+	path('uploadVideo/', views.upload_video),
 ]

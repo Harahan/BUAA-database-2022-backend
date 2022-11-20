@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from user.models import User, Follow
+from response.models import Like, Dislike, Comment
 # Create your views here.
 from .models import Moment
 from .serializers import MomentSerializer
@@ -31,5 +32,14 @@ def sendMoment(request):
 			moment = Moment.objects.create(content=content, user=user)
 			rt.append(MomentSerializer(moment).data)
 		rt.sort(key=lambda x: x['originalTime'], reverse=True)
+		for data in rt:
+			moment_id = data['id']
+			username = request.user.username
+			if Like.objects.filter(obj_id=moment_id, user__username=username, obj_type=0).exists():
+				data['stance'] = 1
+			elif Dislike.objects.filter(obj_id=moment_id, user__username=username, obj_type=0).exists():
+				data['stance'] = -1
+			else:
+				data['stance'] = 0
 		return JsonResponse({'code': 0, 'data': rt}, status=status.HTTP_200_OK)
 		

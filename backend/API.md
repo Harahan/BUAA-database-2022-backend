@@ -315,16 +315,15 @@
               "tot_dislike": xx,
               "rank": xx, # 0~5 caculate from tot_like and tot_dislike
               "color": [xx, xx, ...] 
-              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', 
-              				'#FF4842', '#1890FF', '#94D82D', '#FFC107']
+              # choose from ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107']
               				
               "priceSale": xx, 
               "status": xx, # 0: normal, 1: sale, 2: new
               "category": xx, # choose from ['food', 'clothing', 'book', 'decoration', 'digital', 'other']
       }
   ```
-
-  ​    
+  
+​    
 
 ## BLOG
 
@@ -365,7 +364,8 @@
               "id": xx,
               "tot_like": xx,
               "tot_dislike": xx,
-              "tot_comment": xx
+              "tot_comment": xx,
+              "followed": xx
           }
           {
               ...
@@ -513,6 +513,27 @@
         ]
   ```
   
+
+* ``blog/uploadVideo/``
+
+  ``POST``
+
+  ```python
+  I:
+      {
+          "video": xxx
+  	}
+      
+  O:
+      {
+          "code": xxx,
+          "url": xxx
+  	}
+      
+  # code:
+  # 0 --> success
+  # 1 --> error, the value of url is ""
+  ```
 
 ## MOMENT
 
@@ -676,7 +697,8 @@
               "username": xxx,
               "avatar": xxx,
               "content": xxx,
-              "time": xxx
+              "time": xxx,
+              "stance": xx
           }
           {
               ...
@@ -763,7 +785,6 @@
       }
   ```
   
-
 * ``response/findComment/``
 
   ``POST``
