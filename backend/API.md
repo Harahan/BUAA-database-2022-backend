@@ -537,7 +537,7 @@
 
 ## MOMENT
 
-* ``moment/sendMoment``
+* ``moment/sendMoment/``
 
   ``POST``
 
@@ -828,7 +828,7 @@
               "content": xx,
               "tot_like": xx,
               "tot_dislike": xx,
-              "stance":
+              "stance": xx,
           	"id": xx
       	}
           {
@@ -870,6 +870,6 @@
 
 * 2022/11/19/22:00: 改``fetchUserMerchandises``，新增``getMerchandise``、``postMerchandise``
 
-* 2022/11/20/19:00: 完成``addComment``、``delComment``、``findComment``、``findComments``
+* 2022/11/20/19:00: 完成``addComment``、``delComment``、``findComment``、``findComments``，在``blog``的``fetchAll``加入``followed``字段，``findComents``、``sendMoment``加入``stance``字段
 
   
