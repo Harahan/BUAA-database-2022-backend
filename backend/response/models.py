@@ -22,6 +22,7 @@ class Comment(models.Model):
 	time = models.DateTimeField(auto_now_add=True)
 	content = models.TextField()
 	tot_like = models.IntegerField(default=0)
+	tot_dislike = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.content
@@ -61,6 +62,8 @@ class Dislike(models.Model):
 def like_post_save(sender, instance, created, **kwargs):
 	if created:
 		x = [Moment, Article, Comment, Merchandise, User]
+		if not x[int(instance.obj_type)].objects.filter(id=instance.obj_id).exists():
+			return
 		obj = x[int(instance.obj_type)].objects.get(id=instance.obj_id)
 		obj.tot_like += 1
 		obj.save()
@@ -69,6 +72,8 @@ def like_post_save(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Like)
 def like_post_delete(sender, instance, **kwargs):
 	x = [Moment, Article, Comment, Merchandise, User]
+	if not x[int(instance.obj_type)].objects.filter(id=instance.obj_id).exists():
+		return
 	obj = x[int(instance.obj_type)].objects.get(id=instance.obj_id)
 	obj.tot_like -= 1
 	obj.save()
@@ -78,6 +83,8 @@ def like_post_delete(sender, instance, **kwargs):
 def dislike_post_save(sender, instance, created, **kwargs):
 	if created:
 		x = [Moment, Article, Comment, Merchandise, User]
+		if not x[int(instance.obj_type)].objects.filter(id=instance.obj_id).exists():
+			return
 		obj = x[int(instance.obj_type)].objects.get(id=instance.obj_id)
 		obj.tot_dislike += 1
 		obj.save()
@@ -86,8 +93,32 @@ def dislike_post_save(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Dislike)
 def dislike_post_delete(sender, instance, **kwargs):
 	x = [Moment, Article, Comment, Merchandise, User]
+	if not x[int(instance.obj_type)].objects.filter(id=instance.obj_id).exists():
+		return
 	obj = x[int(instance.obj_type)].objects.get(id=instance.obj_id)
 	obj.tot_dislike -= 1
 	obj.save()
+	
+	
+@receiver(post_save, sender=Comment)
+def comment_post_save(sender, instance, created, **kwargs):
+	if created:
+		x = [Moment, Article, Merchandise]
+		if not x[int(instance.obj_type)].objects.filter(id=instance.obj_id).exists():
+			return
+		obj = x[int(instance.obj_type)].objects.get(id=instance.obj_id)
+		obj.tot_comment += 1
+		obj.save()
+		
+		
+@receiver(post_delete, sender=Comment)
+def comment_post_delete(sender, instance, **kwargs):
+	x = [Moment, Article, Merchandise]
+	if not x[int(instance.obj_type)].objects.filter(id=instance.obj_id).exists():
+		return
+	obj = x[int(instance.obj_type)].objects.get(id=instance.obj_id)
+	obj.tot_comment -= 1
+	obj.save()
+
 
 	

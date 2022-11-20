@@ -738,6 +738,12 @@
           "content": xx
       }
       
+      
+  O:
+      {
+          "id": xx
+      }
+      
   # ---------------------------------
   #		(obj_type, obj)
   #     ====================
@@ -753,16 +759,31 @@
   ```python
   I:
       {
-          "obj_type": xx, # 0, 1, 2, 3, 4
-          "obj_id": xx,
+          "id": xx
+      }
+  ```
+  
+
+* ``response/findComment/``
+
+  ``POST``
+
+  ```python
+  I:
+      {
+          "id": xx
       }
       
-  # ---------------------------------
-  #		(obj_type, obj)
-  #     ====================
-  #		(0, 'moment'),
-  #		(1, 'article'),
-  #		(2, 'merchandise'),
+  O:
+      {
+          "username": xx,
+          "avatar": xx,
+          "time": xx,
+          "content": xx,
+          "tot_like": xx,
+          "tot_dislike": xx,
+          "id": xx
+      }
   ```
 
   
@@ -773,10 +794,21 @@
 ## log:
 
 * 2022/11/12/23:30: 添加完成``postArticle``、``uploadPicture``、``getProfile``、修改``fetchAll``、对于所有``fetch*``当为空时改为返回会``{}``或者``[]``，并完成简单测试
+
 * 2022/11/13/17:00：对于``blog``而言调整``fetchOne``格式与``fetchAll``格式一致，完成``sendMoment``，大改完成``fetchAll``（``blog``）
+
 * 2022/11/13/23:00：调整``sendMoment``
+
 * 2022/11/14/21:00:	完成``getChats``、``findUser``、``getRecords``、``sendRecord``
+
 * 2022/11/15/18:00: 加入``comment``、``like``、``dislike``，修改``profile``相关接口
+
 * 2022/11/15/23:00: 修改所有接口加入``id``、``tot_dislike``、``tot_like``、``tot_comment``，对于每条``record``任然没有传``id``，新增``fetchUserArticles``和``fetchUserMerchandises``，明天继续完善``response``，暂时只有数据库没有可用``api``，修改``getProfile``
+
 * 2022/11/16/20:30: 修改`getChats`，新增`createChat`，删除``findUser``，完成``takeStance``
+
 * 2022/11/19/22:00: 改``fetchUserMerchandises``，新增``getMerchandise``、``postMerchandise``
+
+* 2022/11/20/15:00: 完成``addComment``、``delComment``、``findComment``
+
+  
