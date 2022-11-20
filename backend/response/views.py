@@ -85,12 +85,36 @@ def del_comment(request):
 @csrf_exempt
 def find_comment(request):
 	if request.method == 'POST':
-		if not request.user.is_authenticated:
-			return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
 		comment_id = int(request.POST.get('id'))
 		if not Comment.objects.filter(id=comment_id).exists():
 			return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 		comment = Comment.objects.get(id=comment_id)
 		serializer = CommentSerializer(comment)
 		return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+	
+	
+@csrf_exempt
+def find_comments(request):
+	if request.method == 'POST':
+		x = [Moment, Article, Merchandise]
+		obj_id = int(request.POST.get('obj_id'))
+		obj_type = int(request.POST.get('obj_type'))
+		if not x[obj_type].objects.filter(id=obj_id).exists():
+			return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+		comments = Comment.objects.filter(obj_id=obj_id, obj_type=obj_type)
+		serializer = CommentSerializer(comments, many=True)
+		serializer_data = serializer.data
+		for data in serializer_data:
+			if request.user.is_authenticated:
+				if Like.objects.filter(user=request.user, obj_id=data['id'], obj_type=2).exists():
+					data['stance'] = 1
+				elif Dislike.objects.filter(user=request.user, obj_id=data['id'], obj_type=2).exists():
+					data['stance'] = -1
+				else:
+					data['stance'] = 0
+			else:
+				data['stance'] = 0
+		rt = serializer.data
+		rt = sorted(rt, key=lambda x: x['originalTime'], reverse=True)
+		return JsonResponse(rt, safe=False, status=status.HTTP_200_OK)
 	

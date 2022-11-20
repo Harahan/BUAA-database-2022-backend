@@ -323,6 +323,7 @@
       }
   ```
   
+
 ​    
 
 ## BLOG
@@ -513,7 +514,6 @@
         ]
   ```
   
-
 * ``blog/uploadVideo/``
 
   ``POST``
@@ -562,7 +562,8 @@
                   "id": xx,
                   "tot_like": xx,
                   "tot_dislike": xx,
-                  "tot_comment": xx
+                  "tot_comment": xx,
+                  "stance": xx
               }
               {
                   ....
@@ -698,7 +699,6 @@
               "avatar": xxx,
               "content": xxx,
               "time": xxx,
-              "stance": xx
           }
           {
               ...
@@ -807,6 +807,46 @@
       }
   ```
 
+
+* ``response/findComments/``
+
+  ``POST``
+
+  ```python
+  I:
+      {
+          "obj_type": xx, # 0, 1, 2, 3, 4
+          "obj_id": xx,
+      }
+      
+  O:
+      [
+          {
+              "username": xx,
+              "avatar": xx,
+              "time": xx,
+              "content": xx,
+              "tot_like": xx,
+              "tot_dislike": xx,
+              "stance":
+          	"id": xx
+      	}
+          {
+              ...
+          }
+          ...
+      ]
+      
+  # ---------------------------------
+  #		(obj_type, obj)
+  #     ====================
+  #		(0, 'moment'),
+  #		(1, 'article'),
+  #		(2, 'comment'),
+  #		(3, 'merchandise'),
+  #		(4, 'user'),  
+  ```
+
   
 
 
@@ -830,6 +870,6 @@
 
 * 2022/11/19/22:00: 改``fetchUserMerchandises``，新增``getMerchandise``、``postMerchandise``
 
-* 2022/11/20/15:00: 完成``addComment``、``delComment``、``findComment``
+* 2022/11/20/19:00: 完成``addComment``、``delComment``、``findComment``、``findComments``
 
   
