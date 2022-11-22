@@ -347,7 +347,47 @@
   ```
   
 
-​    
+* `shop/delMerchandise/`
+
+  `POST`
+
+  ```python
+  I:
+      {
+          id:xx
+      }
+  
+  # 403 --> fobid
+  # 401 --> log in before
+  # 404 --> not found
+  ```
+
+
+* ``shop/fixMerchandise/``
+
+  ``POST``
+
+  ```python
+  I:
+      {
+         id: xx,
+         image: xx,
+         name: '', 
+         description: '',
+         price: '',
+         priceSale: '',
+         deliveryLocation: '',
+         deliveryTime: '',
+         category: '',
+         color: xx,xxx,
+      }
+      
+  # 403 --> fobid
+  # 401 --> log in before
+  # 404 --> not found
+  ```
+
+  
 
 ## BLOG
 
@@ -775,7 +815,6 @@
       ]
   ```
   
-
 * ``group/addContact/``
 
   ``POST``
@@ -978,4 +1017,8 @@
 
 * 2022/11/22/20:00：新增``user/getContacts/``、``chat/addMember/``、``moment/getMoment/``、``moment/delMoment/``，注意看``createChat``的``I``和``O``
 
+* 2022/11/23/00:30，新增``fixMerchandise``、``delMerchandise``
+
+  
+  
   

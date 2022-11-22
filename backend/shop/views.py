@@ -110,3 +110,47 @@ def get_merchandise(request):
 		serializer = MerchandiseSerializer(merchandise)
 		return JsonResponse(serializer.data, safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+
+
+@csrf_exempt
+def del_merchandise(request):
+	if request.method == 'POST':
+		if not request.user.is_authenticated:
+			return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
+		if not Merchandise.objects.filter(id=request.POST.get('id')).exists():
+			return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+		merchandise = Merchandise.objects.get(id=request.POST.get('id'))
+		if merchandise.username != request.user:
+			return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+		merchandise.delete()
+		return HttpResponse(status=status.HTTP_200_OK)
+	return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+
+
+@csrf_exempt
+def fix_merchandise(request):
+	if request.method == 'POST':
+		if not request.user.is_authenticated:
+			return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
+		if not Merchandise.objects.filter(id=request.POST.get('id')).exists():
+			return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+		merchandise = Merchandise.objects.get(id=request.POST.get('id'))
+		if merchandise.username != request.user:
+			return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+		color = request.POST.get('color').split(',')
+		c = 0
+		for x in list(color):
+			c += COLOR[x]
+		merchandise.name = request.POST.get('name')
+		merchandise.category = request.POST.get('category')
+		merchandise.deliveryTime = request.POST.get('deliveryTime')
+		merchandise.deliveryLocation = request.POST.get('deliveryLocation')
+		merchandise.color = c
+		merchandise.description = request.POST.get('description')
+		if request.FILES.get('image'):
+			merchandise.image = request.FILES.get('image')
+		merchandise.price = float(request.POST.get('price'))
+		merchandise.priceSale = float(request.POST.get('priceSale'))
+		merchandise.save()
+		return HttpResponse(status=status.HTTP_200_OK)
+	return HttpResponse(status=status.HTTP_400_BAD_REQUEST)

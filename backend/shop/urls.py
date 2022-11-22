@@ -7,4 +7,6 @@ urlpatterns = [
 	path('fetchUserMerchandises/', views.fetch_user_merchandises),
 	path('postMerchandise/', views.post_merchandise),
 	path('getMerchandise/', views.get_merchandise),
+	path('delMerchandise/', views.del_merchandise),
+	path('fixMerchandise/', views.fix_merchandise),
 ]
