@@ -10,4 +10,5 @@ urlpatterns = [
 	path('follow/', views.follow),
 	path('fixProfile/', views.fix_profile),
 	path('getProfile/', views.get_profile),
+	path('getContacts/', views.get_contacts),
 ]

@@ -3,7 +3,7 @@ import os
 
 from django.contrib import auth
 from django.contrib.auth import authenticate
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 # Create your views here.
 
@@ -132,3 +132,20 @@ def get_profile(request):
 		serializer.data['code'] = 0 if request.user.is_authenticated and \
 									   request.user.username == request.POST.get('username') else 1
 		return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+
+
+# return the user who has followed the current user and also been followed by the current user
+def get_contacts(request):
+	if request.method == 'GET':
+		if not request.user.is_authenticated:
+			return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
+		followers = Follow.objects.filter(followee=request.user)  # user: followee
+		followees = Follow.objects.filter(follower=request.user)  # user: follower
+		contacts = []
+		for follower in followers:
+			if followees.filter(followee=follower.follower).exists():
+				contacts.append(follower.follower)
+		serializer = UserSerializer(contacts, many=True)
+		# serializer.data['code'] = 0
+		return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
+	return HttpResponse(status=status.HTTP_400_BAD_REQUEST)

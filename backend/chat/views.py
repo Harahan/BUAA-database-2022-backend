@@ -128,3 +128,16 @@ def send_record(request):
 		return JsonResponse(rt, safe=False)
 		
 	return JsonResponse([], safe=False)
+
+
+@csrf_exempt
+def add_member(request):
+	if request.method == 'POST':
+		chat_id = request.POST.get('id')
+		chat = Chat.objects.get(id=chat_id)
+		for username in request.POST.get('username').split(','):
+			if User.objects.filter(username=username).exists() and not chat.member.filter(username=username).exists():
+				user = User.objects.get(username=username)
+				chat.member.add(user)
+		chat.save()
+		return JsonResponse(ChatSerializer(chat).data, safe=False)

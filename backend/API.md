@@ -188,6 +188,29 @@
     # code:
     # 0 --> success
     # 1 --> username is "" or username is not the user who is enquirying
+  ```
+
+* ``user/getContacts/``
+
+  ``GET``
+
+  返回和当前登陆用户互关的所有人
+
+  ```python
+      
+  O:
+      [
+          {
+              "username": xxx,
+              "avatar": xxx
+          }
+          {
+              "username": xxx,
+              "avatar": xxx
+          }
+          ...
+      ]
+  ```
 
 ## SHOP
 
@@ -582,6 +605,50 @@
   # 1 --> please sign in before
   ```
 
+* ``moment/getMoment/``
+
+  ``POST``
+
+  返回对应id的moment
+  
+  ```python
+  I:
+      {
+          "id": xxx
+      }
+  
+  O:
+    # sucess
+      {
+          "username": xxx,
+          "avatar": xxx,
+          "content": xxx,
+          "time": xxx,
+          "id": xx,
+          "tot_like": xx,
+          "tot_dislike": xx,
+          "tot_comment": xx,
+          "stance": xx
+      }
+  ```
+
+* ``moment/delMoment/``
+
+  ``POST``
+
+  删除对应id的moment，如果不是管理员/创作者则无法删除
+
+  ```python
+  I:
+      {
+          "id": xxx
+      }
+  
+  # 401 --> login before
+  # 403 --> not the author
+  # 200 --> ok
+  ```
+
 ## CHAT
 
 **注意避免游客访问，后端就不检查了**
@@ -708,6 +775,38 @@
   ```
   
 
+* ``group/addContact/``
+
+  ``POST``
+
+  把一些人加入群聊
+
+  ```python
+   I:
+      {
+          "username": xxx,yyy,zzz
+          "id":xxx #group chat id 
+      }
+  
+  O:
+      {
+            "id": xxx, # private chat(group chat) id
+            "type": xxx, # private chat(group chat)
+            "name": xxx, # "" if the chat is a private chat 
+            "time": xxx, # creating time
+            "owner": xxx, # sponsor
+            "avatar": xxx,
+            "latest": { # maybe is {}
+                "username": xxx,
+                  "content": xxx,
+                  "avatar": xxx,
+                  "time": xxx
+              }
+      }
+  ```
+
+
+
 ## RESPONSE
 
 **前端检查登陆**
@@ -783,6 +882,10 @@
       {
           "id": xx
       }
+      
+  # 401 --> login before
+  # 403 --> not the author
+  # 200 --> ok
   ```
   
 * ``response/findComment/``
@@ -871,5 +974,7 @@
 * 2022/11/19/22:00: 改``fetchUserMerchandises``，新增``getMerchandise``、``postMerchandise``
 
 * 2022/11/20/19:00: 完成``addComment``、``delComment``、``findComment``、``findComments``，在``blog``的``fetchAll``加入``followed``字段，``findComents``、``sendMoment``加入``stance``字段
+
+* 2022/11/22/20:00：新增``user/getContacts/``、``chat/addMember/``、``moment/getMoment/``、``moment/delMoment/``
 
   

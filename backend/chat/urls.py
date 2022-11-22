@@ -8,4 +8,5 @@ urlpatterns = [
 	path('getRecords/', views.get_records),
 	path('sendRecord/', views.send_record),
 	path('createChat/', views.create_chat),
+	path('addMember/', views.add_member),
 ]
