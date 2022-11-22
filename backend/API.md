@@ -693,7 +693,8 @@
   ```
 
 * ``chat/createChat/``
-    如果只有一个人则创建私聊，反之创建群聊
+    注意``name``为空**当且仅当**是私聊，此时``username``必须为``xx,xx``格式，不能
+    有多余逗号或者空格，同时必须刚好两个人，``name``不为空则为群聊
 
   ``POST``
 
@@ -975,6 +976,6 @@
 
 * 2022/11/20/19:00: 完成``addComment``、``delComment``、``findComment``、``findComments``，在``blog``的``fetchAll``加入``followed``字段，``findComents``、``sendMoment``加入``stance``字段
 
-* 2022/11/22/20:00：新增``user/getContacts/``、``chat/addMember/``、``moment/getMoment/``、``moment/delMoment/``
+* 2022/11/22/20:00：新增``user/getContacts/``、``chat/addMember/``、``moment/getMoment/``、``moment/delMoment/``，注意看``createChat``的``I``和``O``
 
   

@@ -76,6 +76,13 @@ def create_chat(request):
 		if not request.user.is_authenticated:
 			return HttpResponse(status=status.HTTP_401_UNAUTHORIZED)
 		if not request.POST.get('name'):
+			# if the private chat exists, return it
+			for chat in Chat.objects.all():
+				if chat.type == "private" and chat.member.count() == 2:
+					x = chat.member.all()[0].username
+					y = chat.member.all()[1].username
+					if request.POST.get('username') == x + "," + y or request.POST.get('username') == y + "," + x:
+						return JsonResponse(ChatSerializer(chat).data, safe=False)
 			chat = Chat.objects.create(name="", type="private", owner=request.user)
 		else:
 			chat = Chat.objects.create(name=request.POST.get('name'), type="group", owner=request.user)
