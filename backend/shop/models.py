@@ -1,4 +1,8 @@
+import os
+
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import pre_delete
 
 COLOR = {
 	'#00AB55': 1,	 # green
@@ -37,5 +41,24 @@ class Merchandise(models.Model):
 	deliveryLocation = models.CharField(max_length=1024, default="", blank=True)
 	deliveryTime = models.CharField(max_length=200, default=None, blank=True, null=True)
 	priceSale = models.FloatField(default=0)
+
+	
+# del comment, like, dislike before merchandise is deleted
+@receiver(pre_delete, sender=Merchandise)
+def del_comment_like_dislike(sender, instance, **kwargs):
+	from response.models import Comment, Like, Dislike
+	
+	Comment.objects.filter(obj_type=2, obj_id=instance.id).delete()
+	Like.objects.filter(obj_type=3, obj_id=instance.id).delete()
+	Dislike.objects.filter(obj_type=3, obj_id=instance.id).delete()
+
+
+# del image file before merchandise is deleted
+@receiver(pre_delete, sender=Merchandise)
+def del_image(sender, instance, **kwargs):
+	if instance.image.name != 'merchandise/default.jpg' and Merchandise.objects.filter(image=instance.image).count() == 1:
+		# if exists, delete
+		if os.path.isfile(instance.image.path):
+			instance.image.delete(save=False)
 	
 	

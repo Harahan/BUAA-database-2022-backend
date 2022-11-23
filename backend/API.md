@@ -985,9 +985,7 @@
   #     ====================
   #		(0, 'moment'),
   #		(1, 'article'),
-  #		(2, 'comment'),
-  #		(3, 'merchandise'),
-  #		(4, 'user'),  
+  #		(2, 'merchandise'),
   ```
 
   

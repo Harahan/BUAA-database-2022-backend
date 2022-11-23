@@ -1,7 +1,11 @@
 import hashlib
+import os
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import pre_delete
+from response.models import Comment, Like, Dislike
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -38,4 +42,20 @@ class Follow(models.Model):
 	class Meta:
 		unique_together = ('followee', 'follower')  # only one followee can be followed by one follower
 
+	
+# del like, dislike before del user
+@receiver(pre_delete, sender=User)
+def del_like_dislike_comment(sender, instance, **kwargs):
+	from response.models import Comment, Like, Dislike
+	Like.objects.filter(obj_type=4, obj_id=instance.id).delete()
+	Dislike.objects.filter(obj_type=4, obj_id=instance.id).delete()
+	
+	
+# del the file of avatar when user is deleted
+# and the file is not the default avatar
+@receiver(pre_delete, sender=User)
+def del_avatar(sender, instance, **kwargs):
+	if instance.avatar.name != 'avatar/default.jpg' and User.objects.filter(avatar=instance.avatar).count() == 1:
+		if os.path.isfile(instance.avatar.path):
+			instance.avatar.delete(False)
 	
