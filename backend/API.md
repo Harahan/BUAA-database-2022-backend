@@ -258,7 +258,7 @@
           "new": xx, # bool
           "category": xx, # "" for all
           "color": xx, # "" for all
-          "priceSale": xx, # 0: priceSale<=25, 1: 25<priceSale<=75, 2: priceSale>75
+          "priceSale": xx, # 0: priceSale<=25, 1: 25<priceSale<=75, 2: priceSale>75, 3: all
           "rank": xx, # rank>=xx
       }
   

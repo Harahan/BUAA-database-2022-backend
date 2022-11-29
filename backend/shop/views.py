@@ -56,7 +56,7 @@ def fetch_user_merchandises(request):
 			serializer_data = [x for x in serializer_data if x['priceSale'] <= 25]
 		elif int(request.POST.get('priceSale')) == 1:
 			serializer_data = [x for x in serializer_data if 25 < x['priceSale'] <= 75]
-		else:
+		elif int(request.POST.get('priceSale')) == 2:
 			serializer_data = [x for x in serializer_data if 75 < x['priceSale']]
 		if not serializer_data:
 			return JsonResponse([], safe=False)
