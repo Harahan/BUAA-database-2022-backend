@@ -14,7 +14,7 @@ class Chat(models.Model):
 		('private', 'private'),
 	)
 	
-	name = models.CharField(max_length=100, default='')
+	name = models.CharField(max_length=100, default='anonymous')
 	# description = models.CharField(max_length=200)
 	member = models.ManyToManyField('user.User', related_name='chat_member', blank=True)
 	owner = models.ForeignKey('user.User', on_delete=models.CASCADE, related_name='chat_owner')
