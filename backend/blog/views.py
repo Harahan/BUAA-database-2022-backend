@@ -171,18 +171,26 @@ def post_article(request):
 		if not request.user.is_authenticated:
 			return JsonResponse({'code': 1}, status=status.HTTP_200_OK)
 		user = request.user
-		if Article.objects.filter(authorName=user, title=request.POST['title']).exists():
-			return JsonResponse({'code': 2}, status=status.HTTP_200_OK)
-		if request.POST['cover'] == "":
-			Article.objects.create(authorName=user,
-								   title=request.POST['title'],
-								   html=request.FILES.get('html'))
-		else:
-			cover = request.POST['cover'].split('/')[-1]
-			Article.objects.create(authorName=user,
-								   title=request.POST['title'],
-								   html=request.FILES.get('html'),
-								   cover='article/picture/' + cover)
+		if not Article.objects.filter(authorName=user, title=request.POST['title']).exists():
+			if request.POST['cover'] == "":
+				Article.objects.create(authorName=user,
+									   title=request.POST['title'],
+									   html=request.FILES.get('html'))
+			else:
+				cover = request.POST['cover'].split('/')[-1]
+				Article.objects.create(authorName=user,
+									   title=request.POST['title'],
+									   html=request.FILES.get('html'),
+									   cover='article/picture/' + cover)
+		else: #  修改之前的的文章
+			article = Article.objects.get(authorName=user, title=request.POST['title'])
+			article.html = request.FILES.get('html')
+			if request.POST['cover'] != "":
+				cover = request.POST['cover'].split('/')[-1]
+				article.cover = 'article/picture/' + cover
+			else:
+				article.cover = 'article/picture/default.jpg'
+			article.save()
 		tags = request.POST['tags'].split(',')
 		for tag in tags:
 			if not Area.objects.filter(areaName=tag).exists():
