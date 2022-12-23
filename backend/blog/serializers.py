@@ -37,5 +37,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 		data['digest'] = HTMLParser(file).text().replace('\n', '').replace('\t', '').replace('\r', '').replace(' ', '')
 		data['html'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.html))
 		data['cover'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.cover))
+		if str(instance.cover).endswith("default.jpg"):
+			data['cover'] = ""
 		return data
 		
