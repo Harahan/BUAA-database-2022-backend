@@ -34,7 +34,9 @@ class ArticleSerializer(serializers.ModelSerializer):
 			data['categories'] = [a.area.areaName for a in AreaWithArticle.objects.filter(article=instance)]
 		data['userPhoto'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.authorName.avatar))
 		file = open(instance.html.path, 'r', encoding='utf-8').read()
-		data['digest'] = HTMLParser(file).text().replace('\n', ' ').replace('\t', ' ').replace('\r', ' ').replace('  ', ' ')
+		data['digest'] = HTMLParser(file).text()
+		if len(data['digest']) > 512:
+			data['digest'] = data['digest'][:512] + '...'
 		data['html'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.html))
 		data['cover'] = os.path.join(WEB_HOST_MEDIA_URL, str(instance.cover))
 		if str(instance.cover).endswith("default.jpg"):
