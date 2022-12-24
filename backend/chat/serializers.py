@@ -31,6 +31,11 @@ class ChatSerializer(serializers.ModelSerializer):
 			data['latest'] = dict(RecordSerializer(latest).data)
 		else:
 			data['latest'] = dict()
+		data['users'] = list()
+		from user.models import User
+		from user.serializers import UserSerializer
+		for user in instance.member.all():
+			data['users'].append(UserSerializer(user).data)
 		return data
 
 

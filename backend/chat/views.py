@@ -83,7 +83,7 @@ def create_chat(request):
 					y = chat.member.all()[1].username
 					if request.POST.get('username') == x + "," + y or request.POST.get('username') == y + "," + x:
 						return JsonResponse(ChatSerializer(chat).data, safe=False)
-			chat = Chat.objects.create(name="", type="private", owner=request.user)
+			chat = Chat.objects.create(name=request.POST.get('username').replace(",", "_"), type="private", owner=request.user)
 		else:
 			chat = Chat.objects.create(name=request.POST.get('name'), type="group", owner=request.user)
 		for username in request.POST.get('username').split(','):
