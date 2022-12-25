@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-from user.models import User
+from user.models import User, Follow
 from .models import Merchandise, COLOR
 from .serializers import MerchandiseSerializer
 # Create your views here.
@@ -15,12 +15,33 @@ from .serializers import MerchandiseSerializer
 # image domain is not exist
 def fetch_all(request):
 	if request.method == 'GET':
-		merchandises = Merchandise.objects.all()
-		if merchandises:
-			serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
-			return JsonResponse(serializer.data, safe=False)
+		if request.GET['follow'] != 'true':
+			merchandises = Merchandise.objects.all()
+			if merchandises:
+				serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
+				return JsonResponse(serializer.data, safe=False)
+			else:
+				JsonResponse([], safe=False)
 		else:
-			JsonResponse([], safe=False)
+			if request.user.is_authenticated:
+				if Follow.objects.filter(follower=request.user).exists():
+					merchandises = Merchandise.objects.filter(authorName_id__in=
+															 Follow.objects.filter(follower=request.user).values_list('followee', flat=True))
+					merchandises |= Merchandise.objects.filter(authorName=request.user)
+					if merchandises:
+						serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
+						return JsonResponse(serializer.data, safe=False)
+					else:
+						JsonResponse([], safe=False)
+				else:
+					merchandises = Merchandise.objects.filter(authorName=request.user)
+					if merchandises:
+						serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
+						return JsonResponse(serializer.data, safe=False)
+					else:
+						JsonResponse([], safe=False)
+			else:
+				return JsonResponse([], safe=False)
 	return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
 
