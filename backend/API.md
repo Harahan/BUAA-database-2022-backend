@@ -219,6 +219,11 @@
   ``GET``
 
   ```python
+  I:
+      {
+          "follow": xx # true or false
+      }
+  
   O:  
       [
           {
@@ -241,7 +246,7 @@
 
   找不到全为空
 
-* ``blog/fetchUserMerchandises/``
+* ``shop/fetchUserMerchandises/``
 
   ``POST``
 
