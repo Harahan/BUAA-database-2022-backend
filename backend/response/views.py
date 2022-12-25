@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -62,7 +64,7 @@ def add_comment(request):
 		content = request.POST.get('content')
 		if not x[obj_type].objects.filter(id=obj_id).exists():
 			return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-		comment = Comment(user=request.user, obj_id=obj_id, obj_type=obj_type, content=content)
+		comment = Comment(user=request.user, obj_id=obj_id, obj_type=obj_type, content=content, time=datetime.datetime.now())
 		comment.save()
 		return JsonResponse({"id": comment.id}, status=status.HTTP_200_OK)
 	

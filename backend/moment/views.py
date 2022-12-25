@@ -1,4 +1,6 @@
 # from django.shortcuts import render
+import datetime
+
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -29,7 +31,7 @@ def send_moment(request):
 		if request.POST.get('content'):
 			content = request.POST.get('content')
 			user = request.user
-			moment = Moment.objects.create(content=content, user=user)
+			moment = Moment.objects.create(content=content, user=user, time=datetime.datetime.now())
 			rt.append(MomentSerializer(moment).data)
 		rt.sort(key=lambda x: x['originalTime'], reverse=True)
 		for data in rt:

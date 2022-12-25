@@ -19,7 +19,7 @@ class Comment(models.Model):
 	user = models.ForeignKey('user.User', on_delete=models.CASCADE)
 	obj_type = models.IntegerField(max_length=10, choices=TYPE)
 	obj_id = models.IntegerField()
-	time = models.DateTimeField(auto_now_add=True)
+	time = models.DateTimeField()
 	content = models.TextField()
 	tot_like = models.IntegerField(default=0)
 	tot_dislike = models.IntegerField(default=0)

@@ -1,3 +1,4 @@
+import datetime
 import os.path
 import random
 
@@ -175,13 +176,15 @@ def post_article(request):
 			if request.POST['cover'] == "":
 				Article.objects.create(authorName=user,
 									   title=request.POST['title'],
-									   html=request.FILES.get('html'))
+									   html=request.FILES.get('html'),
+									   releaseTime=datetime.datetime.now())
 			else:
 				cover = request.POST['cover'].split('/')[-1]
 				Article.objects.create(authorName=user,
 									   title=request.POST['title'],
 									   html=request.FILES.get('html'),
-									   cover='article/picture/' + cover)
+									   cover='article/picture/' + cover,
+									   releaseTime=datetime.datetime.now())
 		else: #  修改之前的的文章
 			article = Article.objects.get(authorName=user, title=request.POST['title'])
 			article.html = request.FILES.get('html')
@@ -190,7 +193,10 @@ def post_article(request):
 				article.cover = 'article/picture/' + cover
 			else:
 				article.cover = 'article/picture/default.jpg'
+			article.releaseTime = datetime.datetime.now()
 			article.save()
+			if AreaWithArticle.objects.filter(article=article).exists():
+				AreaWithArticle.objects.filter(article=article).delete()
 		tags = request.POST['tags'].split(',')
 		for tag in tags:
 			if not Area.objects.filter(areaName=tag).exists():

@@ -34,7 +34,7 @@ class Merchandise(models.Model):
 	tot_dislike = models.IntegerField(default=0)
 	tot_comment = models.IntegerField(default=0)
 	username = models.ForeignKey('user.User', on_delete=models.CASCADE)  # the user
-	time = models.DateTimeField(auto_now=True)
+	time = models.DateTimeField()
 	description = models.CharField(max_length=1024, default="", blank=True)
 	category = models.CharField(max_length=20, choices=TYPE, default="other")
 	color = models.IntegerField(default=0)

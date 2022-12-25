@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -95,6 +97,7 @@ def post_merchandise(request):
 			image=request.FILES.get('image'),
 			price=float(request.POST.get('price')),
 			priceSale=float(request.POST.get('priceSale')),
+			time=datetime.datetime.now(),
 		)
 		merchandise.save()
 		return HttpResponse(status=status.HTTP_200_OK)
@@ -151,6 +154,7 @@ def fix_merchandise(request):
 			merchandise.image = request.FILES.get('image')
 		merchandise.price = float(request.POST.get('price'))
 		merchandise.priceSale = float(request.POST.get('priceSale'))
+		merchandise.time = datetime.datetime.now()
 		merchandise.save()
 		return HttpResponse(status=status.HTTP_200_OK)
 	return HttpResponse(status=status.HTTP_400_BAD_REQUEST)

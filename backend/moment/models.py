@@ -8,7 +8,7 @@ from django.dispatch import receiver
 
 class Moment(models.Model):
 	user = models.ForeignKey('user.User', on_delete=models.CASCADE)
-	time = models.DateTimeField(auto_now_add=True)
+	time = models.DateTimeField()
 	content = models.TextField()
 	tot_like = models.IntegerField(default=0)
 	tot_comment = models.IntegerField(default=0)
