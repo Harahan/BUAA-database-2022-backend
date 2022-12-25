@@ -25,16 +25,16 @@ def fetch_all(request):
 		else:
 			if request.user.is_authenticated:
 				if Follow.objects.filter(follower=request.user).exists():
-					merchandises = Merchandise.objects.filter(authorName_id__in=
+					merchandises = Merchandise.objects.filter(username_id__in=
 															 Follow.objects.filter(follower=request.user).values_list('followee', flat=True))
-					merchandises |= Merchandise.objects.filter(authorName=request.user)
+					merchandises |= Merchandise.objects.filter(username=request.user)
 					if merchandises:
 						serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
 						return JsonResponse(serializer.data, safe=False)
 					else:
 						JsonResponse([], safe=False)
 				else:
-					merchandises = Merchandise.objects.filter(authorName=request.user)
+					merchandises = Merchandise.objects.filter(username=request.user)
 					if merchandises:
 						serializer = MerchandiseSerializer(merchandises, many=True, allow_null=True)
 						return JsonResponse(serializer.data, safe=False)
